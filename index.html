@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <title>NASME GYM — Management System</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     LANDING PAGE
+════════════════════════════════════════════ -->
+<div id="landing-page">
+
+  <!-- Motivational ticker -->
+  <div class="ticker-bar">
+    <div class="ticker-inner" id="ticker">
+      <span>💪 Train Hard</span> &nbsp;·&nbsp; Push Your Limits &nbsp;·&nbsp; <span>🏆 Achieve More</span> &nbsp;·&nbsp; Stay Consistent &nbsp;·&nbsp; <span>🔥 No Excuses</span> &nbsp;·&nbsp; Earn Your Rest &nbsp;·&nbsp; <span>⚡ NASME GYM</span> &nbsp;·&nbsp; Nigeria's Finest &nbsp;·&nbsp;
+      <span>💪 Train Hard</span> &nbsp;·&nbsp; Push Your Limits &nbsp;·&nbsp; <span>🏆 Achieve More</span> &nbsp;·&nbsp; Stay Consistent &nbsp;·&nbsp; <span>🔥 No Excuses</span> &nbsp;·&nbsp; Earn Your Rest &nbsp;·&nbsp; <span>⚡ NASME GYM</span> &nbsp;·&nbsp; Nigeria's Finest &nbsp;·&nbsp;
+    </div>
+  </div>
+
+  <header class="hero">
+    <!-- Navbar -->
+    <div class="nav_bar">
+      <div class="nav_uno">
+        <img class="logo_img" src="assets/logo.png" onerror="this.style.display='none'" alt="NASME GYM Logo" />
+        <span class="gym-name-nav">NASME GYM</span>
+      </div>
+      <nav class="nav_links">
+        <a href="#">Home</a>
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#pricing">Membership</a>
+      </nav>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu">&#9776;</button>
+      <div class="nav-cta-group">
+        <a class="btn-outline btn-nav-sm" id="nav-login-btn" href="#">Log In</a>
+        <a class="btn-maroon btn-nav-sm" href="#pricing">Start Free Trial</a>
+      </div>
+    </div>
+
+    <!-- Hero Text -->
+    <div class="hero-badge"><span></span> Nigeria's #1 Gym Management Platform</div>
+
+    <div class="hero-title">
+      PUSH YOUR<br><em>LIMITS</em><br>WITH US
+    </div>
+
+    <p class="hero-sub">
+      More than a gym — a community built around your goals. Join thousands of members pushing boundaries every single day.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn-maroon" href="#pricing">Join Now — It's Free</a>
+      <a class="btn-outline" href="#about">See How It Works</a>
+    </div>
+
+    <div class="extras">
+      <div class="extras-row">
+        <a href="#">💪 Personal Training</a>
+        <a href="#">🏃 Cardio Zone</a>
+        <a href="#">🧘 Group Classes</a>
+        <a href="#">🏊 Swimming Pool</a>
+        <a href="#">📅 View Schedule</a>
+        <a href="#">💻 Online Classes</a>
+      </div>
+    </div>
+  <!-- Mobile nav drawer -->
+  <div class="mobile-nav-drawer" id="mobile-nav-drawer">
+    <button class="mobile-nav-close" id="mobile-nav-close">&#x2715;</button>
+    <nav class="mobile-nav-links">
+      <a href="#" id="mob-login-link">Log In</a>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#pricing">Membership</a>
+      <a class="btn-maroon mob-trial-btn" href="#pricing">Start Free Trial</a>
+    </nav>
+  </div>
+  </header>
+
+  <!-- Stats Strip -->
+  <div class="stats-strip">
+    <div class="strip-stat"><div class="strip-num">2,400+</div><div class="strip-label">Active Members</div></div>
+    <div class="strip-stat"><div class="strip-num">12</div><div class="strip-label">Expert Trainers</div></div>
+    <div class="strip-stat"><div class="strip-num">38+</div><div class="strip-label">Equipment Pieces</div></div>
+    <div class="strip-stat"><div class="strip-num">5★</div><div class="strip-label">Member Rating</div></div>
+  </div>
+
+  <!-- Services -->
+  <section class="services-section" id="services">
+    <div class="section-eyebrow">What We Offer</div>
+    <div class="section-title">WORLD-CLASS FACILITIES</div>
+    <p class="section-sub">Everything you need to reach your fitness goals, under one roof.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🏋️</div>
+        <div class="service-name">STRENGTH TRAINING</div>
+        <p class="service-desc">State-of-the-art weight racks, machines, and free weights designed for every skill level — from beginners to competitive athletes.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🧑‍🏫</div>
+        <div class="service-name">PERSONAL TRAINING</div>
+        <p class="service-desc">One-on-one sessions with certified coaches who design custom plans around your specific body type, goals, and schedule.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🤸</div>
+        <div class="service-name">GROUP CLASSES</div>
+        <p class="service-desc">High-energy classes from Zumba and Yoga to HIIT and Spin — something for every mood, every day of the week.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🏊</div>
+        <div class="service-name">SWIMMING POOL</div>
+        <p class="service-desc">Olympic-standard swimming lanes open daily. Ideal for low-impact cardio, recovery, and competitive lap swimming.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">💻</div>
+        <div class="service-name">ONLINE CLASSES</div>
+        <p class="service-desc">Can't make it in? Stream live and on-demand classes from home. Your membership gives you full digital access 24/7.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🥗</div>
+        <div class="service-name">NUTRITION PLANS</div>
+        <p class="service-desc">Expert dietitians craft personalised meal plans to complement your training — because fitness begins in the kitchen.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about-section" id="about">
+    <div class="about-text">
+      <div class="section-eyebrow">Our Story</div>
+      <div class="section-title">YOUR FITNESS MATTERS TO US</div>
+      <p>We started NASME GYM with one belief: every person deserves access to a world-class fitness environment — regardless of experience or background.</p>
+      <p>Since opening our doors, we have helped thousands of members transform their health, build confidence, and create habits that last a lifetime.</p>
+      <ul>
+        <li>Open 6 AM – 10 PM, seven days a week</li>
+        <li>Certified trainers with proven track records</li>
+        <li>Clean, spacious, air-conditioned facilities</li>
+        <li>No hidden fees — transparent pricing always</li>
+        <li>Nigerian-owned and community-driven</li>
+      </ul>
+    </div>
+    <div class="about-imgs">
+      <img src="https://i.pinimg.com/736x/39/a1/11/39a1117cb2860eb0538b2f140449e3e9.jpg" alt="Gym floor" />
+      <img src="https://i1-c.pinimg.com/1200x/3a/0e/d7/3a0ed7f4a7d9332869ec6848ff7e3b0a.jpg" alt="Training" />
+      <img src="https://i.pinimg.com/736x/00/70/75/0070753dbca491932709d7eb4438aa7c.jpg" alt="Weights" />
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing-section" id="pricing">
+    <div class="section-eyebrow">Membership Plans</div>
+    <div class="section-title">SIMPLE, FAIR PRICING</div>
+    <p class="section-sub">No contracts, no surprises. Pick the plan that fits your lifestyle and start today.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-plan">Weekly</div>
+        <div class="price-amount">₦5K</div>
+        <div class="price-period">per week</div>
+        <ul class="price-features">
+          <li>Full gym access</li>
+          <li>Group classes (2/week)</li>
+          <li>Locker access</li>
+        </ul>
+        <a class="btn-outline">Get Started</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-plan">Monthly</div>
+        <div class="price-amount">₦12K</div>
+        <div class="price-period">per month</div>
+        <ul class="price-features">
+          <li>Full gym + pool access</li>
+          <li>Unlimited group classes</li>
+          <li>1 PT session/month</li>
+          <li>Nutrition consultation</li>
+          <li>Online class access</li>
+        </ul>
+        <a class="btn-maroon">Get Started</a>
+      </div>
+      <div class="price-card">
+        <div class="price-plan">Yearly</div>
+        <div class="price-amount">₦100K</div>
+        <div class="price-period">per year — save 30%</div>
+        <ul class="price-features">
+          <li>Everything in Monthly</li>
+          <li>4 PT sessions/month</li>
+          <li>Free gym merchandise</li>
+          <li>Priority class booking</li>
+        </ul>
+        <a class="btn-outline">Get Started</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials-section">
+    <div class="section-eyebrow">Member Stories</div>
+    <div class="section-title">REAL PEOPLE. REAL RESULTS.</div>
+    <p class="section-sub">Don't take our word for it — hear from the members who show up every day.</p>
+    <div class="testimonials-grid">
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">NASME GYM completely changed how I approach fitness. The trainers are knowledgeable, the facilities are spotless, and the community keeps you motivated every single day.</p>
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-author">
+          <div class="testi-avatar">AO</div>
+          <div>
+            <div class="testi-name">Amara Okafor</div>
+            <div class="testi-meta">Member since 2023 · Monthly Plan</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">I lost 18kg in six months with the help of my personal trainer here. The nutrition plan they designed alongside my workouts made all the difference. Worth every naira.</p>
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-author">
+          <div class="testi-avatar">EE</div>
+          <div>
+            <div class="testi-name">Emeka Eze</div>
+            <div class="testi-meta">Member since 2024 · Yearly Plan</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-quote">"</div>
+        <p class="testi-text">The swimming pool is Olympic quality, the group classes are energetic and diverse, and the online access means I never miss a session even when travelling for work.</p>
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-author">
+          <div class="testi-avatar">NA</div>
+          <div>
+            <div class="testi-name">Ngozi Adeyemi</div>
+            <div class="testi-meta">Member since 2022 · Yearly Plan</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Admin Entry -->
+  <div class="admin-entry">
+    <h2>STAFF &amp; ADMIN ACCESS</h2>
+    <p>Manage members, payments, equipment, and your store from one powerful dashboard.</p>
+    <button class="btn-maroon btn-dashboard-open" id="open-dashboard-btn">⚡ Open Dashboard</button>
+  </div>
+
+  <footer class="site-footer">
+    <div>
+      <div class="footer-brand">NASME GYM</div>
+      <div class="footer-copy">&copy; 2025 NASME GYM. All rights reserved. Lagos, Nigeria.</div>
+    </div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+      <a href="#">Contact Us</a>
+      <a href="#">Careers</a>
+    </div>
+  </footer>
+
+
+  <!-- Floating CTA -->
+  <div class="float-cta" id="float-cta">
+    <p>🔥 <strong>Join 2,400+ members</strong> pushing their limits today.</p>
+    <a class="btn-maroon btn-float-plans" href="#pricing">View Plans</a>
+    <button class="float-cta-close" title="Dismiss">×</button>
+  </div>
+</div><!-- /landing-page -->
+
+
+<!-- ══════════════════════════════════════════
+     LOGIN OVERLAY
+════════════════════════════════════════════ -->
+<div id="login-overlay">
+  <div class="login-card">
+
+    <!-- Left panel -->
+    <div class="login-panel-left">
+      <div>
+        <div class="lpl-brand">NASME GYM</div>
+        <div class="lpl-tag">Management System</div>
+      </div>
+      <div>
+        <div class="lpl-headline">WELCOME<br><em>BACK,</em><br>CHAMPION.</div>
+        <p class="lpl-sub">Your team is waiting. Sign in to manage members, track payments, and keep the gym running at its best.</p>
+        <ul class="lpl-perks">
+          <li>Real-time member management</li>
+          <li>Payment tracking &amp; reports</li>
+          <li>Equipment &amp; store control</li>
+          <li>Role-based secure access</li>
+        </ul>
+      </div>
+      <div class="lpl-footer-text">
+        NASME GYM · Lagos, Nigeria · v1.0.0
+      </div>
+    </div>
+
+    <!-- Right panel -->
+    <div class="login-panel-right">
+      <button class="login-close">✕</button>
+
+      <div class="login-title">Sign In</div>
+      <div class="login-subtitle">Enter your credentials to continue</div>
+
+      <div class="login-error" id="login-error">❌ Incorrect username or password. Please try again.</div>
+
+      <div class="login-field">
+        <label>Username</label>
+        <input type="text" id="login-user" placeholder="e.g. admin" autocomplete="username" />
+      </div>
+      <div class="login-field">
+        <label>Password</label>
+        <input type="password" id="login-pass" placeholder="Enter your password" autocomplete="current-password" />
+        <button class="pw-toggle" type="button" title="Show/hide password" id="pw-eye">👁</button>
+      </div>
+
+      <div class="login-row">
+        <label class="login-remember"><input type="checkbox" /> Remember me</label>
+        <span class="login-forgot">Forgot password?</span>
+      </div>
+
+      <button class="login-btn" id="login-submit">
+        <span class="btn-text">Sign In →</span>
+        <span class="btn-spinner">⏳ Signing in...</span>
+      </button>
+
+      <div class="login-divider"><span>or quick access</span></div>
+      <div class="login-roles">
+        <div class="role-btn">👑 Admin</div>
+        <div class="role-btn">🟡 Staff</div>
+      </div>
+
+      <div class="login-hint">
+        Demo: <code>admin</code> / <code>admin123</code>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     DASHBOARD APP
+════════════════════════════════════════════ -->
+<div id="dashboard-app">
+  <div class="dash-root">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-text">NASME GYM</div>
+        <div class="logo-sub">Management System</div>
+      </div>
+      <div class="sidebar-user">
+        <div class="user-avatar" id="user-avatar">A</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">Admin User</div>
+          <div class="user-role" id="user-role">Super Admin</div>
+        </div>
+      </div>
+      <nav class="nav-dash">
+        <div class="nav-section-label">Overview</div>
+        <div class="nav-item active" data-page="dashboard"><span class="nav-icon">⚡</span> Dashboard</div>
+        <div class="nav-section-label">Modules</div>
+        <div class="nav-item" data-page="members"><span class="nav-icon">👥</span> Member Management</div>
+        <div class="nav-item" data-page="payments"><span class="nav-icon">💳</span> Payments &amp; Subscriptions</div>
+        <div class="nav-item" data-page="security"><span class="nav-icon">🔐</span> Data &amp; Security</div>
+        <div class="nav-item" data-page="equipment"><span class="nav-icon">🏋️</span> Equipment Management</div>
+        <div class="nav-item" data-page="store"><span class="nav-icon">🛒</span> Online Gym Store</div>
+      </nav>
+      <div class="back-to-site"><span class="nav-icon">🌐</span> Back to Website</div>
+      <div class="logout-btn"><span class="nav-icon">🚪</span> Log Out</div>
+      <div class="sidebar-footer"><span class="status-dot"></span> SYSTEM ONLINE &nbsp;·&nbsp; v1.0.0</div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle">☰</button>
+          <div class="page-title" id="pageTitle">DASHBOARD</div>
+        </div>
+        <div class="topbar-actions">
+          <div class="search-bar">
+            <span>🔍</span>
+            <input type="text" placeholder="Search..." id="globalSearch" />
+          </div>
+          <button class="btn btn-primary btn-sm" id="topbar-new-btn">+ New</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="alert" id="alert"></div>
+
+        <!-- Tip of the day (shown globally) -->
+        <div class="tip-card" id="tip-card"></div>
+
+        <!-- DASHBOARD PAGE -->
+        <div class="page active" id="page-dashboard">
+          <div class="welcome-banner">
+            <div class="wb-left">
+              <h3 id="wb-greeting">Good morning, Admin 👋</h3>
+              <p>Here's what's happening at NASME GYM today.</p>
+            </div>
+            <div class="wb-time" id="wb-time"></div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card"><div class="stat-label">Total Members</div><div class="stat-value" id="dash-members">247</div><div class="stat-sub">↑ 12 this month</div><div class="stat-icon">👥</div></div>
+            <div class="stat-card"><div class="stat-label">Monthly Revenue</div><div class="stat-value">₦847K</div><div class="stat-sub">↑ 8% vs last month</div><div class="stat-icon">💰</div></div>
+            <div class="stat-card"><div class="stat-label">Equipment Items</div><div class="stat-value">38</div><div class="stat-sub">3 under maintenance</div><div class="stat-icon">🏋️</div></div>
+            <div class="stat-card"><div class="stat-label">Store Orders</div><div class="stat-value">19</div><div class="stat-sub">6 pending dispatch</div><div class="stat-icon">🛒</div></div>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header"><div class="card-title">Recent Activity</div></div>
+              <div id="activityFeed">
+                <div class="activity-item"><div class="activity-dot" style="background:var(--success)"></div><div class="activity-text">New member <strong>Amara Okafor</strong> registered</div><div class="activity-time">2 min ago</div></div>
+                <div class="activity-item"><div class="activity-dot" style="background:var(--maroon-lt)"></div><div class="activity-text">Payment received from <strong>Emeka Eze</strong> — ₦12,000</div><div class="activity-time">15 min ago</div></div>
+                <div class="activity-item"><div class="activity-dot" style="background:var(--warning)"></div><div class="activity-text">Treadmill #3 scheduled for maintenance</div><div class="activity-time">1 hr ago</div></div>
+                <div class="activity-item"><div class="activity-dot" style="background:#9090e0"></div><div class="activity-text">Order #ORD-019 dispatched to <strong>Ngozi Adeyemi</strong></div><div class="activity-time">2 hrs ago</div></div>
+                <div class="activity-item"><div class="activity-dot" style="background:var(--danger)"></div><div class="activity-text">Membership expired — <strong>Tunde Fashola</strong></div><div class="activity-time">3 hrs ago</div></div>
+              </div>
+            </div>
+            <div>
+              <div class="card">
+                <div class="card-header"><div class="card-title">Plan Distribution</div></div>
+                <div class="progress-wrap"><div class="progress-label"><span>Yearly</span><span>42%</span></div><div class="progress-bar"><div class="progress-fill" style="width:42%;background:var(--maroon)"></div></div></div>
+                <div class="progress-wrap"><div class="progress-label"><span>Monthly</span><span>35%</span></div><div class="progress-bar"><div class="progress-fill" style="width:35%;background:var(--navy-lt)"></div></div></div>
+                <div class="progress-wrap"><div class="progress-label"><span>Weekly</span><span>15%</span></div><div class="progress-bar"><div class="progress-fill" style="width:15%;background:var(--maroon-lt)"></div></div></div>
+                <div class="progress-wrap"><div class="progress-label"><span>Daily</span><span>8%</span></div><div class="progress-bar"><div class="progress-fill" style="width:8%;background:var(--text-muted)"></div></div></div>
+              </div>
+              <div class="card">
+                <div class="card-header"><div class="card-title">Quick Stats</div></div>
+                <div class="role-row"><div class="role-name">Active Today</div><div class="qs-value qs-success">63</div></div>
+                <div class="role-row"><div class="role-name">Overdue Payments</div><div class="qs-value qs-danger">7</div></div>
+                <div class="role-row"><div class="role-name">Low Stock Items</div><div class="qs-value qs-warning">4</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MEMBERS PAGE -->
+        <div class="page" id="page-members">
+          <div class="card">
+            <div class="card-header"><div class="card-title">All Members</div><button class="btn btn-primary btn-sm" id="btn-add-member">+ Add Member</button></div>
+            <div class="table-wrap"><table><thead><tr><th>ID</th><th>Full Name</th><th>Plan</th><th>Status</th><th>Check-ins</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="members-tbody"></tbody></table></div>
+          </div>
+        </div>
+
+        <!-- PAYMENTS PAGE -->
+        <div class="page" id="page-payments">
+          <div class="stats-grid stats-grid--3">
+            <div class="stat-card"><div class="stat-label">Total Collected</div><div class="stat-value stat-value--sm">₦2.4M</div><div class="stat-sub">This year</div></div>
+            <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value stat-value--sm stat-value--warn">₦84K</div><div class="stat-sub">7 overdue accounts</div></div>
+            <div class="stat-card"><div class="stat-label">Transactions</div><div class="stat-value stat-value--sm">183</div><div class="stat-sub">All time</div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Transaction History</div><button class="btn btn-primary btn-sm" id="btn-add-payment">+ Record Payment</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Txn ID</th><th>Member</th><th>Plan</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th></tr></thead><tbody id="payments-tbody"></tbody></table></div>
+          </div>
+        </div>
+
+        <!-- SECURITY PAGE -->
+        <div class="page" id="page-security">
+          <div class="security-grid">
+            <div class="card">
+              <div class="card-header"><div class="card-title">Role Access Control</div></div>
+              <div class="role-row"><div><div class="role-name">🔴 Super Admin</div><div class="role-perms">Full system access · All modules</div></div><span class="badge badge-active">ACTIVE</span></div>
+              <div class="role-row"><div><div class="role-name">🟠 Admin</div><div class="role-perms">Members, Payments, Reports</div></div><span class="badge badge-active">ACTIVE</span></div>
+              <div class="role-row"><div><div class="role-name">🟡 Staff</div><div class="role-perms">Check-ins, Class scheduling</div></div><span class="badge badge-active">ACTIVE</span></div>
+              <div class="role-row"><div><div class="role-name">🟢 Member</div><div class="role-perms">Profile, Store only</div></div><span class="badge badge-active">ACTIVE</span></div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">Security Status</div></div>
+              <div class="role-row"><div class="role-name">🔒 AES-256 Encryption</div><span class="badge badge-active">ON</span></div>
+              <div class="role-row"><div class="role-name">🛡️ TLS / HTTPS</div><span class="badge badge-active">ON</span></div>
+              <div class="role-row"><div class="role-name">📱 2FA Authentication</div><span class="badge badge-active">ON</span></div>
+              <div class="role-row"><div class="role-name">💾 Auto Daily Backup</div><span class="badge badge-active">ON</span></div>
+              <div class="role-row"><div class="role-name">⛔ Account Lockout (5 tries)</div><span class="badge badge-active">ON</span></div>
+              <div class="role-row"><div class="role-name">📋 GDPR Compliance</div><span class="badge badge-active">ON</span></div>
+            </div>
+            <div class="card card--full">
+              <div class="card-header"><div class="card-title">Audit Log</div><span class="audit-label">All data-modifying actions</span></div>
+              <div id="audit-log">
+                <div class="log-entry"><div class="log-dot" style="background:var(--success)"></div><div class="log-time">09:42:11</div><div class="log-event">Member MBR-247 created — Amara Okafor registered</div></div>
+                <div class="log-entry"><div class="log-dot" style="background:var(--maroon-lt)"></div><div class="log-time">09:31:05</div><div class="log-event">Payment TXN-183 recorded — ₦12,000 from Emeka Eze</div></div>
+                <div class="log-entry"><div class="log-dot" style="background:#9090e0"></div><div class="log-time">08:54:20</div><div class="log-event">Order ORD-019 status updated to Shipped by Staff</div></div>
+                <div class="log-entry"><div class="log-dot" style="background:var(--warning)"></div><div class="log-time">08:20:00</div><div class="log-event">Equipment EQ-08 (Treadmill) maintenance scheduled</div></div>
+                <div class="log-entry"><div class="log-dot" style="background:var(--danger)"></div><div class="log-time">07:00:01</div><div class="log-event">Auto-backup completed — 14.2MB archived</div></div>
+                <div class="log-entry"><div class="log-dot" style="background:var(--text-muted)"></div><div class="log-time">06:55:14</div><div class="log-event">Failed login attempt — IP 197.211.58.x (account locked)</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EQUIPMENT PAGE -->
+        <div class="page" id="page-equipment">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Equipment Inventory</div><button class="btn btn-primary btn-sm" id="btn-add-equipment">+ Add Equipment</button></div>
+            <div class="equip-grid" id="equip-grid"></div>
+          </div>
+        </div>
+
+        <!-- STORE PAGE -->
+        <div class="page" id="page-store">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Online Gym Store</div><button class="btn btn-primary btn-sm" id="btn-add-product">+ Add Product</button></div>
+            <div class="store-grid" id="store-grid"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Orders</div></div>
+            <div class="table-wrap"><table><thead><tr><th>Order ID</th><th>Member</th><th>Product</th><th>Qty</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody id="orders-tbody"></tbody></table></div>
+          </div>
+        </div>
+
+      </div><!-- /content -->
+    </div><!-- /main -->
+  </div><!-- /dash-root -->
+</div><!-- /dashboard-app -->
+
+
+<!-- MODALS -->
+<div class="modal-overlay" id="member-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">ADD NEW MEMBER</div><button class="modal-close">✕</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Full Name *</label><input type="text" id="m-name" placeholder="e.g. Amara Okafor"/></div>
+        <div class="form-group"><label>Date of Birth</label><input type="date" id="m-dob"/></div>
+        <div class="form-group"><label>Gender</label><select id="m-gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div class="form-group"><label>Phone *</label><input type="text" id="m-phone" placeholder="+234 800 000 0000"/></div>
+        <div class="form-group"><label>Email</label><input type="email" id="m-email" placeholder="email@example.com"/></div>
+        <div class="form-group"><label>Plan *</label><select id="m-plan"><option>Daily</option><option>Weekly</option><option>Monthly</option><option>Yearly</option></select></div>
+        <div class="form-group"><label>Emergency Contact</label><input type="text" id="m-emergency" placeholder="Name & Phone"/></div>
+        <div class="form-group"><label>Fitness Goal</label><input type="text" id="m-goal" placeholder="e.g. Weight loss"/></div>
+        <div class="form-group full"><label>Medical Conditions</label><textarea id="m-medical" placeholder="Any known conditions or allergies..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" id="btn-cancel-member">Cancel</button><button class="btn btn-primary" id="btn-submit-member">Register Member</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="payment-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">RECORD PAYMENT</div><button class="modal-close">✕</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Member Name *</label><input type="text" id="p-name" placeholder="Member name"/></div>
+        <div class="form-group"><label>Plan *</label><select id="p-plan"><option>Daily — ₦1,500</option><option>Weekly — ₦5,000</option><option>Monthly — ₦12,000</option><option>Yearly — ₦100,000</option></select></div>
+        <div class="form-group"><label>Amount (₦) *</label><input type="number" id="p-amount" placeholder="e.g. 12000"/></div>
+        <div class="form-group"><label>Payment Method *</label><select id="p-method"><option>Cash</option><option>Card</option><option>Mobile Money</option><option>Bank Transfer</option></select></div>
+        <div class="form-group full"><label>Notes</label><input type="text" id="p-notes" placeholder="Optional notes..."/></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" id="btn-cancel-payment">Cancel</button><button class="btn btn-primary" id="btn-submit-payment">Record Payment</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="equipment-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">ADD EQUIPMENT</div><button class="modal-close">✕</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Name *</label><input type="text" id="eq-name" placeholder="e.g. Treadmill"/></div>
+        <div class="form-group"><label>Category *</label><select id="eq-cat"><option>Cardio</option><option>Strength</option><option>Flexibility</option><option>Free Weights</option><option>Accessories</option></select></div>
+        <div class="form-group"><label>Quantity *</label><input type="number" id="eq-qty" placeholder="e.g. 4" min="1"/></div>
+        <div class="form-group"><label>Condition</label><select id="eq-cond"><option>Excellent</option><option>Good</option><option>Fair</option><option>Needs Repair</option></select></div>
+        <div class="form-group"><label>Location</label><input type="text" id="eq-loc" placeholder="e.g. Floor A, Zone 2"/></div>
+        <div class="form-group"><label>Status</label><select id="eq-status"><option>Available</option><option>In Use</option><option>Under Maintenance</option><option>Retired</option></select></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" id="btn-cancel-equipment">Cancel</button><button class="btn btn-primary" id="btn-submit-equipment">Add Equipment</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="product-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">ADD STORE PRODUCT</div><button class="modal-close">✕</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Product Name *</label><input type="text" id="pr-name" placeholder="e.g. Resistance Bands"/></div>
+        <div class="form-group"><label>Category</label><select id="pr-cat"><option>Gym Wear</option><option>Supplements</option><option>Accessories</option><option>Equipment</option></select></div>
+        <div class="form-group"><label>Price (₦) *</label><input type="number" id="pr-price" placeholder="e.g. 5000"/></div>
+        <div class="form-group"><label>Stock Qty *</label><input type="number" id="pr-stock" placeholder="e.g. 20"/></div>
+        <div class="form-group full"><label>Description</label><textarea id="pr-desc" placeholder="Short product description..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" id="btn-cancel-product">Cancel</button><button class="btn btn-primary" id="btn-submit-product">Add Product</button></div>
+  </div>
+</div>
+
+
+<script src="app.js"></script>
+</body>
+</html>
