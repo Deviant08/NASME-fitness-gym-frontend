@@ -11,9 +11,9 @@
    CONFIG — change this one line when
    you go live on Railway
 ══════════════════════════════════════ */
-const API_BASE = 'http://localhost/nasme-gym/api';
+// const API_BASE = "https://NASME fitness gym backend.railway.app/api";
 // Live example:
-// const API_BASE = 'https://nasme-gym-backend.up.railway.app/api';
+const API_BASE = "https://nasme-fitness-gym-backend.up.railway.app/api";
 
 
 /* ══════════════════════════════════════
