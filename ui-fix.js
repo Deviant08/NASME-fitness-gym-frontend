@@ -1,6 +1,6 @@
 /* NASME GYM — overrides login + wires leftover landing buttons */
 (function () {
-  window.api = async function api(file, method, body, params) {
+  async function apiFix(file, method, body, params) {
     method = method || 'GET';
     body = body || null;
     params = params || {};
@@ -29,9 +29,11 @@
     }
     if (!res.ok) throw new Error(json.error || json.message || ('Request failed (' + res.status + ')'));
     return json;
-  };
+  }
 
-  window.attemptLogin = async function attemptLogin() {
+  window.api = apiFix;
+
+  async function attemptLoginFix() {
     var btn = document.getElementById('login-submit');
     var username = document.getElementById('login-user').value.trim().toLowerCase();
     var password = document.getElementById('login-pass').value;
@@ -45,7 +47,7 @@
     btn.disabled = true;
     errBox.classList.remove('show');
     try {
-      var json = await window.api('auth.php?action=login', 'POST', { username: username, password: password });
+      var json = await apiFix('auth.php?action=login', 'POST', { username: username, password: password });
       loginSuccess(json.user);
     } catch (err) {
       errBox.textContent = '❌ ' + (err.message || 'Login failed. Please try again.');
@@ -56,9 +58,33 @@
       btn.classList.remove('loading');
       btn.disabled = false;
     }
-  };
+  }
+
+  window.attemptLogin = attemptLoginFix;
 
   function wireLanding() {
+    var submit = document.getElementById('login-submit');
+    if (submit) {
+      var clone = submit.cloneNode(true);
+      submit.parentNode.replaceChild(clone, submit);
+      clone.addEventListener('click', attemptLoginFix);
+    }
+    var pass = document.getElementById('login-pass');
+    if (pass) {
+      pass.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') attemptLoginFix();
+      });
+    }
+    document.querySelectorAll('.role-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var role = btn.textContent.indexOf('Admin') !== -1 ? 'admin' : 'staff';
+        var creds = { admin: ['admin', 'admin123'], staff: ['staff', 'staff123'] };
+        var pair = creds[role];
+        document.getElementById('login-user').value = pair[0];
+        document.getElementById('login-pass').value = pair[1];
+        attemptLoginFix();
+      });
+    });
     document.querySelectorAll('.price-card a').forEach(function (btn) {
       btn.style.cursor = 'pointer';
       btn.addEventListener('click', function (e) {
