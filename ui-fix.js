@@ -1,11 +1,10 @@
 /* NASME GYM — login fixes, landing buttons, remove swimming pool copy */
 (function () {
+  var API_ROOT = 'https://nasme-fitness-gym-backend-production.up.railway.app/api/';
+
   function stripPoolCopy() {
     document.querySelectorAll('.extras-row a').forEach(function (a) {
-      if (/swim|pool/i.test(a.textContent)) {
-        a.textContent = 'Boxing Studio';
-        a.innerHTML = '🥊 Boxing Studio';
-      }
+      if (/swim|pool/i.test(a.textContent)) a.innerHTML = '🥊 Boxing Studio';
     });
     document.querySelectorAll('.service-card').forEach(function (card) {
       if (/swim|pool/i.test(card.textContent)) {
@@ -31,7 +30,7 @@
     method = method || 'GET';
     body = body || null;
     params = params || {};
-    var url = new URL('https://nasme-fitness-gym-backend.up.railway.app/api/' + file);
+    var url = new URL(API_ROOT + file);
     Object.entries(params).forEach(function (entry) {
       if (entry[1]) url.searchParams.set(entry[0], entry[1]);
     });
