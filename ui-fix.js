@@ -76,8 +76,43 @@
   }
   window.attemptLogin = attemptLoginFix;
 
+  function openLogin() {
+    if (typeof openLoginScreen === 'function') openLoginScreen();
+    else if (typeof window.openLoginScreen === 'function') window.openLoginScreen();
+    else {
+      var overlay = document.getElementById('login-overlay');
+      if (overlay) overlay.classList.add('open');
+      var user = document.getElementById('login-user');
+      if (user) setTimeout(function () { user.focus(); }, 200);
+    }
+  }
+
   function wireLanding() {
     stripPoolCopy();
+
+    function bindOpen(el) {
+      if (!el || el.dataset.loginWired) return;
+      el.dataset.loginWired = '1';
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        var drawer = document.getElementById('mobile-nav-drawer');
+        if (drawer) drawer.classList.remove('open');
+        openLogin();
+      });
+    }
+    bindOpen(document.getElementById('nav-login-btn'));
+    bindOpen(document.getElementById('open-dashboard-btn'));
+    bindOpen(document.getElementById('mob-login-link'));
+
+    var closeBtn = document.querySelector('.login-close');
+    if (closeBtn && !closeBtn.dataset.loginWired) {
+      closeBtn.dataset.loginWired = '1';
+      closeBtn.addEventListener('click', function () {
+        if (typeof closeLoginScreen === 'function') closeLoginScreen();
+        else document.getElementById('login-overlay').classList.remove('open');
+      });
+    }
+
     var submit = document.getElementById('login-submit');
     if (submit) {
       var clone = submit.cloneNode(true);
