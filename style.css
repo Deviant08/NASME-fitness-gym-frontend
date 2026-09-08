@@ -1,1 +1,4 @@
-/* Clean style without store styles. See local. */
+@import url("https://cdn.jsdelivr.net/gh/Deviant08/NASME-fitness-gym-frontend@32d28bdc21c77fd0113b0a0f4626326e81f57fc1/style.css");
+
+#login-overlay.open, .modal-overlay.open { display: flex; }
+.admin-only[style*="none"] { display: none !important; }
