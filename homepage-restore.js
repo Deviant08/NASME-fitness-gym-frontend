@@ -23,9 +23,38 @@
       document.getElementById('login-overlay')?.classList.add('hidden');
       document.getElementById('dashboard-app')?.classList.remove('hidden');
     }
+    applyStaffAccess();
+    if (typeof navigate === 'function') navigate('dashboard');
   };
 
+  const oldApply = window.applyRoleUI;
+  window.applyRoleUI = function () {
+    if (typeof oldApply === 'function') oldApply();
+    applyStaffAccess();
+  };
+
+  function applyStaffAccess() {
+    document.querySelectorAll('.nav-item[data-page]').forEach(function (el) {
+      var page = el.getAttribute('data-page');
+      if (page !== 'staff') {
+        el.classList.remove('admin-only');
+        el.style.display = '';
+      } else {
+        el.classList.add('admin-only');
+      }
+    });
+    var roleText = (document.getElementById('sidebar-role')?.textContent || '').toLowerCase();
+    var admin = roleText.indexOf('admin') !== -1;
+    var staffNav = document.querySelector('.nav-item[data-page="staff"]');
+    var staffPage = document.getElementById('page-staff');
+    var addStaff = document.getElementById('add-staff-btn');
+    if (staffNav) staffNav.style.display = admin ? '' : 'none';
+    if (staffPage) staffPage.style.display = admin ? '' : 'none';
+    if (addStaff) addStaff.style.display = admin ? '' : 'none';
+  }
+
   function wireLandingButtons() {
+    applyStaffAccess();
     ['open-login','nav-login-btn','open-dashboard-btn','mob-login-link'].forEach(function (id) {
       const el = document.getElementById(id);
       if (!el || el.dataset.wiredHome) return;
