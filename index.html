@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NASME GYM — Staff Dashboard</title>
+  <title>NASME GYM — Management System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="landing.css" />
 </head>
 <body>
 
@@ -57,15 +58,14 @@
       <div class="nav-item admin-only" data-page="equipment"><span class="nav-icon">🏋️</span> Equipment Management</div>
       <div class="nav-item admin-only" data-page="security"><span class="nav-icon">🔐</span> Data & Security</div>
     </nav>
+    <button class="logout-btn" id="back-to-site">Back to Website</button>
     <button class="logout-btn" id="logout-btn">Log Out</button>
   </aside>
-
   <div class="main-panel">
     <header class="topbar">
       <div class="page-title" id="pageTitle">DASHBOARD</div>
       <span class="status-dot"></span> Live
     </header>
-
     <div class="pages">
       <div class="page active" id="page-dashboard">
         <div class="stats-grid">
@@ -74,12 +74,8 @@
           <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-value" id="stat-revenue">—</div></div>
           <div class="stat-card"><div class="stat-label">Equipment</div><div class="stat-value" id="stat-equipment">—</div></div>
         </div>
-        <div class="card">
-          <div class="card-title">Recent Activity</div>
-          <div id="activity-feed" class="activity-feed"></div>
-        </div>
+        <div class="card"><div class="card-title">Recent Activity</div><div id="activity-feed" class="activity-feed"></div></div>
       </div>
-
       <div class="page" id="page-members">
         <div class="toolbar">
           <input type="search" id="member-search" placeholder="Search members..." />
@@ -87,56 +83,36 @@
         </div>
         <div class="card table-wrap">
           <table>
-            <thead>
-              <tr><th>Code</th><th>Name</th><th>Phone</th><th>Plan</th><th>Status</th><th>Joined</th><th>Actions</th></tr>
-            </thead>
+            <thead><tr><th>Code</th><th>Name</th><th>Phone</th><th>Plan</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
             <tbody id="members-tbody"></tbody>
           </table>
         </div>
       </div>
-
       <div class="page" id="page-staff">
-        <div class="toolbar">
-          <button class="btn btn-primary" id="add-staff-btn">+ Add Staff</button>
-        </div>
+        <div class="toolbar"><button class="btn btn-primary" id="add-staff-btn">+ Add Staff</button></div>
         <div class="card table-wrap">
           <table>
-            <thead>
-              <tr><th>Username</th><th>Full name</th><th>Role</th><th>Created</th><th></th></tr>
-            </thead>
+            <thead><tr><th>Username</th><th>Full name</th><th>Role</th><th>Created</th><th></th></tr></thead>
             <tbody id="staff-tbody"></tbody>
           </table>
         </div>
       </div>
-
       <div class="page" id="page-payments">
         <div class="card table-wrap">
           <table>
-            <thead>
-              <tr><th>Txn</th><th>Member</th><th>Plan</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th></tr>
-            </thead>
+            <thead><tr><th>Txn</th><th>Member</th><th>Plan</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th></tr></thead>
             <tbody id="payments-tbody"></tbody>
           </table>
         </div>
       </div>
-
       <div class="page" id="page-equipment">
-        <div class="card table-wrap">
-          <table>
-            <thead>
-              <tr><th>Name</th><th>Category</th><th>Qty</th><th>Status</th><th>Last Maint.</th></tr>
-            </thead>
-            <tbody id="equipment-tbody"></tbody>
-          </table>
-        </div>
+        <div class="toolbar"><button class="btn btn-primary" id="add-equipment-btn">+ Add Equipment</button></div>
+        <div class="equip-grid" id="equip-grid"></div>
       </div>
-
       <div class="page" id="page-security">
         <div class="card table-wrap">
           <table>
-            <thead>
-              <tr><th>When</th><th>Actor</th><th>Action</th><th>Target</th><th>Details</th></tr>
-            </thead>
+            <thead><tr><th>When</th><th>Actor</th><th>Action</th><th>Target</th><th>Details</th></tr></thead>
             <tbody id="audit-tbody"></tbody>
           </table>
         </div>
@@ -161,35 +137,23 @@
         <div class="form-group"><label>Gender</label><select name="gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
       </div>
       <div class="form-group"><label>Address</label><input name="address" /></div>
-
       <h3>Emergency Contact</h3>
       <div class="form-group"><label>Name</label><input name="emergency_name" /></div>
       <div class="form-group"><label>Phone Number</label><input name="emergency_phone" /></div>
-      <div class="form-group"><label>Relationship</label><input name="emergency_relationship" placeholder="Parent, sibling, friend" /></div>
-
+      <div class="form-group"><label>Relationship</label><input name="emergency_relationship" /></div>
       <h3>Medical Information</h3>
       <div class="form-group"><label>Any medical condition?</label><select name="has_medical_condition"><option>No</option><option>Yes</option></select></div>
       <div class="form-group"><label>If yes, please specify</label><textarea name="medical_notes"></textarea></div>
       <div class="form-group"><label>Any previous injury?</label><select name="has_previous_injury"><option>No</option><option>Yes</option></select></div>
       <div class="form-group"><label>If yes, please specify</label><textarea name="previous_injury_details"></textarea></div>
       <div class="form-group"><label>Currently taking medication?</label><select name="taking_medication"><option>No</option><option>Yes</option></select></div>
-
       <h3>Fitness Information</h3>
       <div class="form-group"><label>Fitness Goal</label><input name="fitness_goal" /></div>
       <div class="form-group"><label>Previous Gym Experience</label><select name="previous_gym_experience"><option>No</option><option>Yes</option></select></div>
-
       <h3>Membership</h3>
-      <div class="form-group"><label>Membership Plan *</label>
-        <select name="plan">
-          <option>Daily</option>
-          <option>Weekly</option>
-          <option selected>Monthly</option>
-          <option>Yearly</option>
-        </select>
-      </div>
+      <div class="form-group"><label>Membership Plan *</label><select name="plan"><option>Daily</option><option>Weekly</option><option selected>Monthly</option><option>Yearly</option></select></div>
       <div class="form-group"><label>Start Date</label><input name="start_date" type="date" /></div>
       <div class="form-group"><label>Payment</label><input name="payment_info" placeholder="Cash, Card, Transfer, amount" /></div>
-
       <button type="submit" class="btn btn-primary btn-block" id="member-submit">Register Member</button>
     </form>
   </div>
@@ -227,5 +191,6 @@
 
 <div id="toast" class="toast"></div>
 <script src="app.js"></script>
+<script src="homepage-restore.js"></script>
 </body>
 </html>
