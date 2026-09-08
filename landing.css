@@ -35,6 +35,27 @@ header.hero {
   background-position: center !important;
 }
 
+/* Current login UI — do not use the old login-card overlay rules */
+#login-overlay {
+  z-index: 4000 !important;
+}
+#login-overlay.hidden {
+  display: none !important;
+}
+#login-overlay:not(.hidden),
+#login-overlay.open {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+#login-overlay .modal,
+#login-overlay .login-modal {
+  display: block !important;
+  visibility: visible !important;
+}
+
 .equip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.4rem; }
 .equip-card { background: #13132b; border: 1px solid #2e2e5a; border-radius: 12px; overflow: hidden; }
 .equip-photo { height: 140px; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: .6rem; }
