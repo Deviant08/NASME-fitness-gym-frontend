@@ -40,19 +40,28 @@ function isAdmin() {
   return role === 'admin' || role === 'superadmin';
 }
 
-async function checkSession() {
-  try {
-    const json = await api('auth.php?action=me');
-    if (json.user) { currentUser = json.user; showDashboard(); return true; }
-  } catch (_) {}
-  showLogin();
-  return false;
-}
-
-function showLogin() {
-  document.getElementById('login-overlay')?.classList.remove('hidden');
+function showLanding() {
+  document.getElementById('login-overlay')?.classList.add('hidden');
   document.getElementById('dashboard-app')?.classList.add('hidden');
   document.getElementById('site-main')?.classList.remove('hidden');
+  document.querySelectorAll('.modal-overlay').forEach(el => {
+    if (el.id !== 'login-overlay') el.classList.remove('open');
+  });
+}
+
+function openLogin() {
+  document.getElementById('login-overlay')?.classList.remove('hidden');
+  const user = document.getElementById('login-user');
+  if (user) setTimeout(() => user.focus(), 50);
+}
+
+async function checkSession() {
+  showLanding();
+  try {
+    const json = await api('auth.php?action=me');
+    if (json.user) currentUser = json.user;
+  } catch (_) {}
+  return false;
 }
 
 function showDashboard() {
@@ -60,7 +69,7 @@ function showDashboard() {
   document.getElementById('site-main')?.classList.add('hidden');
   document.getElementById('dashboard-app')?.classList.remove('hidden');
   applyRoleUI();
-  navigate(isAdmin() ? (currentPage || 'dashboard') : 'members');
+  navigate(isAdmin() ? 'dashboard' : 'members');
 }
 
 function applyRoleUI() {
@@ -97,7 +106,7 @@ async function doLogin() {
 async function doLogout() {
   try { await api('auth.php?action=logout', 'POST'); } catch (_) {}
   currentUser = null;
-  showLogin();
+  showLanding();
 }
 
 function navigate(page) {
@@ -327,11 +336,12 @@ function openModal(id) { document.getElementById(id)?.classList.add('open'); }
 function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
 
 function initApp() {
+  showLanding();
   $$('.nav-item[data-page]').forEach(item => item.addEventListener('click', () => navigate(item.dataset.page)));
   document.getElementById('logout-btn')?.addEventListener('click', doLogout);
   document.getElementById('login-btn')?.addEventListener('click', doLogin);
   document.getElementById('login-pass')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-  document.getElementById('open-login')?.addEventListener('click', () => document.getElementById('login-overlay')?.classList.remove('hidden'));
+  document.getElementById('open-login')?.addEventListener('click', openLogin);
   document.getElementById('close-login')?.addEventListener('click', () => document.getElementById('login-overlay')?.classList.add('hidden'));
   document.getElementById('add-member-btn')?.addEventListener('click', () => openMemberForm(null));
   document.getElementById('member-form')?.addEventListener('submit', e => {
