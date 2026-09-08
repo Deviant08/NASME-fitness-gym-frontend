@@ -1,11 +1,29 @@
-/* Restore original NASME landing page, keep current dashboard */
+/* Restore original NASME landing page, keep current login + dashboard */
 (function () {
   function landingEl() {
     return document.getElementById('landing-page') || document.getElementById('site-main');
   }
 
+  function closeLoginModal() {
+    const overlay = document.getElementById('login-overlay');
+    if (!overlay) return;
+    overlay.classList.add('hidden');
+    overlay.classList.remove('open');
+  }
+
+  function openLoginModal() {
+    const overlay = document.getElementById('login-overlay');
+    if (!overlay) return;
+    overlay.classList.remove('hidden');
+    overlay.classList.add('open');
+    const user = document.getElementById('login-user');
+    if (user) setTimeout(function () { user.focus(); }, 50);
+  }
+
+  window.openLogin = openLoginModal;
+
   window.showLanding = function () {
-    document.getElementById('login-overlay')?.classList.add('hidden');
+    closeLoginModal();
     document.getElementById('dashboard-app')?.classList.add('hidden');
     const land = landingEl();
     if (land) land.classList.remove('hidden');
@@ -18,11 +36,9 @@
   window.showDashboard = function () {
     const land = landingEl();
     if (land) land.classList.add('hidden');
+    closeLoginModal();
     if (typeof oldDash === 'function') oldDash();
-    else {
-      document.getElementById('login-overlay')?.classList.add('hidden');
-      document.getElementById('dashboard-app')?.classList.remove('hidden');
-    }
+    else document.getElementById('dashboard-app')?.classList.remove('hidden');
     applyStaffAccess();
     if (typeof navigate === 'function') navigate('dashboard');
   };
@@ -55,20 +71,15 @@
 
   function wireLandingButtons() {
     applyStaffAccess();
-    ['open-login','nav-login-btn','open-dashboard-btn','mob-login-link'].forEach(function (id) {
+    ['open-login','nav-login-btn','open-dashboard-btn','mob-login-link','open-member-login-btn'].forEach(function (id) {
       const el = document.getElementById(id);
       if (!el || el.dataset.wiredHome) return;
       el.dataset.wiredHome = '1';
-      el.addEventListener('click', function (e) { e.preventDefault(); if (typeof openLogin === 'function') openLogin(); });
+      el.addEventListener('click', function (e) { e.preventDefault(); openLoginModal(); });
     });
-    document.querySelectorAll('.price-card a, .hero-actions .btn-maroon').forEach(function (a) {
-      if (a.dataset.wiredHome) return;
-      a.dataset.wiredHome = '1';
-      a.addEventListener('click', function (e) { e.preventDefault(); if (typeof openLogin === 'function') openLogin(); });
-    });
-    document.getElementById('open-member-login-btn')?.addEventListener('click', function (e) {
+    document.getElementById('close-login')?.addEventListener('click', function (e) {
       e.preventDefault();
-      if (typeof openLogin === 'function') openLogin();
+      closeLoginModal();
     });
     document.getElementById('back-to-site')?.addEventListener('click', function () {
       if (typeof showLanding === 'function') showLanding();
@@ -155,6 +166,9 @@
             if (name) name.textContent = 'BOXING STUDIO';
             if (desc) desc.textContent = 'Heavy bags, pads, and coach-led sessions for cardio, coordination, and confidence.';
           }
+        });
+        landing.querySelectorAll('a').forEach(function (a) {
+          if (/swim|pool/i.test(a.textContent)) a.textContent = a.textContent.replace(/Swimming Pool/i, 'Boxing Studio');
         });
         current.replaceWith(landing);
       }
