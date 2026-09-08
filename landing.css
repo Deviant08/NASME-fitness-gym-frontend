@@ -58,19 +58,31 @@ header.hero {
   visibility: visible !important;
 }
 
-/* Alignment: stop old stylesheet from shoving dashboard tables and columns around */
+/* Sidebar must stay in the flex row, not float over the pages */
 #dashboard-app .sidebar {
-  flex: 0 0 240px;
-  width: 240px;
-  max-width: 240px;
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  z-index: 2;
+  flex: 0 0 240px !important;
+  width: 240px !important;
+  max-width: 240px !important;
+  min-height: 100vh;
 }
-#dashboard-app .main-panel {
-  flex: 1;
-  min-width: 0;
+#dashboard-app .main-panel,
+#dashboard-app .main {
+  position: relative !important;
+  margin-left: 0 !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  width: auto !important;
   overflow-x: auto;
 }
 #dashboard-app .pages {
   width: 100%;
+  box-sizing: border-box;
 }
 #dashboard-app .card.table-wrap,
 #dashboard-app .table-wrap {
