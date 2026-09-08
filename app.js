@@ -4,13 +4,29 @@ let currentUser = null;
 let currentPage = 'dashboard';
 let membersCache = [];
 let previewMember = null;
+let editingMemberId = null; // explicit id while editing (not only hidden form field)
 
 async function api(file, method = 'GET', body = null, params = {}) {
-  const url = new URL(`${API_BASE}/${file}`);
-  Object.entries(params || {}).forEach(([k, v]) => { if (v != null && v !== '') url.searchParams.set(k, v); });
-  const opts = { method, credentials: 'include', headers: { 'Content-Type': 'application/json' } };
+  const [path, qs] = String(file).split('?');
+  const url = new URL(`${API_BASE}/${path}`);
+  if (qs) {
+    new URLSearchParams(qs).forEach((v, k) => url.searchParams.set(k, v));
+  }
+  Object.entries(params || {}).forEach(([k, v]) => {
+    if (v != null && v !== '') url.searchParams.set(k, v);
+  });
+  const opts = {
+    method,
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+  };
   if (body && method !== 'GET') opts.body = JSON.stringify(body);
-  const res = await fetch(url, opts);
+  let res;
+  try {
+    res = await fetch(url, opts);
+  } catch (err) {
+    throw new Error('Failed to fetch — check network or backend status');
+  }
   const json = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
   return json;
@@ -56,11 +72,15 @@ function openLogin() {
 }
 
 async function checkSession() {
-  showLanding();
   try {
     const json = await api('auth.php?action=me');
-    if (json.user) currentUser = json.user;
+    if (json.user) {
+      currentUser = json.user;
+      showDashboard();
+      return true;
+    }
   } catch (_) {}
+  showLanding();
   return false;
 }
 
@@ -269,11 +289,16 @@ function fillMemberForm(m) {
   if (!form) return;
   form.reset();
   if (!m) {
+    editingMemberId = null;
+    if (form.elements.id) form.elements.id.value = '';
     form.elements.plan.value = 'Monthly';
     if (form.elements.start_date) form.elements.start_date.value = new Date().toISOString().slice(0, 10);
     return;
   }
+  editingMemberId = m.id != null ? String(m.id) : null;
+  if (form.elements.id) form.elements.id.value = editingMemberId || '';
   Object.keys(m).forEach(k => {
+    if (k === 'id') return;
     if (form.elements[k] != null && m[k] != null) form.elements[k].value = m[k];
   });
   if (form.elements.start_date && (m.start_date || m.joined_at)) {
@@ -306,7 +331,7 @@ async function handleMemberAction(action, id) {
     const reason = prompt('Reason for archiving this member?');
     if (!reason) return;
     try {
-      await api('members.php?id=' + id, 'PUT', { archive: true, archive_reason: reason });
+      await api('members.php?id=' + encodeURIComponent(id), 'PUT', { archive: true, archive_reason: reason });
       showToast('Member archived');
       loadMembers();
     } catch (e) { showToast(e.message || 'Archive failed', 'error'); }
@@ -315,16 +340,26 @@ async function handleMemberAction(action, id) {
 
 async function saveMember(formData) {
   try {
-    if (formData.id) {
-      const id = formData.id;
-      delete formData.id;
-      await api('members.php?id=' + id, 'PUT', formData);
+    const id = editingMemberId || formData.id || '';
+    delete formData.id;
+
+    // Drop empty strings so we don't wipe optional fields with blanks unintentionally
+    Object.keys(formData).forEach(k => {
+      if (formData[k] === '') delete formData[k];
+    });
+
+    if (id) {
+      await api('members.php?id=' + encodeURIComponent(id), 'PUT', formData);
       showToast('Member details updated');
     } else {
-      delete formData.id;
+      if (!formData.full_name || !formData.phone || !formData.plan) {
+        showToast('Full name, phone and plan are required', 'error');
+        return;
+      }
       const json = await api('members.php', 'POST', formData);
       showToast('Member registered' + (json.member_code ? ' — ' + json.member_code : ''));
     }
+    editingMemberId = null;
     closeModal('member-modal');
     loadMembers();
   } catch (e) {
@@ -336,9 +371,9 @@ function openModal(id) { document.getElementById(id)?.classList.add('open'); }
 function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
 
 function initApp() {
-  showLanding();
   $$('.nav-item[data-page]').forEach(item => item.addEventListener('click', () => navigate(item.dataset.page)));
   document.getElementById('logout-btn')?.addEventListener('click', doLogout);
+  document.getElementById('back-to-site')?.addEventListener('click', showLanding);
   document.getElementById('login-btn')?.addEventListener('click', doLogin);
   document.getElementById('login-pass')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   document.getElementById('open-login')?.addEventListener('click', openLogin);
