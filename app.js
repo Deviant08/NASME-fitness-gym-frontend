@@ -1,25 +1,14 @@
-/* ════════════════════════════════════════
-   NASME GYM — app.js
-   Real backend connection via fetch()
-   Change API_BASE to switch between
-   local XAMPP and live Railway server.
-════════════════════════════════════════ */
-
 const API_BASE = "https://nasme-fitness-gym-backend-production.up.railway.app/api";
 
-/* ── State ── */
 let currentUser = null;
 let currentPage = 'dashboard';
+let membersCache = [];
+let previewMember = null;
 
-/* ── Helpers ── */
 async function api(file, method = 'GET', body = null, params = {}) {
   const url = new URL(`${API_BASE}/${file}`);
   Object.entries(params || {}).forEach(([k, v]) => { if (v != null && v !== '') url.searchParams.set(k, v); });
-  const opts = {
-    method,
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
-  };
+  const opts = { method, credentials: 'include', headers: { 'Content-Type': 'application/json' } };
   if (body && method !== 'GET') opts.body = JSON.stringify(body);
   const res = await fetch(url, opts);
   const json = await res.json().catch(() => ({}));
@@ -29,6 +18,7 @@ async function api(file, method = 'GET', body = null, params = {}) {
 
 function $(sel) { return document.querySelector(sel); }
 function $$(sel) { return document.querySelectorAll(sel); }
+function dash(v) { return (v === null || v === undefined || v === '') ? '—' : String(v); }
 
 function showToast(msg, type = 'success') {
   const t = document.getElementById('toast');
@@ -38,25 +28,22 @@ function showToast(msg, type = 'success') {
   setTimeout(() => t.classList.remove('show'), 3500);
 }
 
-function formatNaira(n) {
-  return '₦' + Number(n || 0).toLocaleString();
-}
-
+function formatNaira(n) { return '₦' + Number(n || 0).toLocaleString(); }
 function formatDate(d) {
   if (!d) return '—';
   try { return new Date(d).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' }); }
   catch { return d; }
 }
 
-/* ── Auth / Session ── */
+function isAdmin() {
+  const role = (currentUser?.role || '').toLowerCase();
+  return role === 'admin' || role === 'superadmin';
+}
+
 async function checkSession() {
   try {
     const json = await api('auth.php?action=me');
-    if (json.user) {
-      currentUser = json.user;
-      showDashboard();
-      return true;
-    }
+    if (json.user) { currentUser = json.user; showDashboard(); return true; }
   } catch (_) {}
   showLogin();
   return false;
@@ -73,14 +60,11 @@ function showDashboard() {
   document.getElementById('site-main')?.classList.add('hidden');
   document.getElementById('dashboard-app')?.classList.remove('hidden');
   applyRoleUI();
-  navigate(currentPage || 'dashboard');
+  navigate(isAdmin() ? (currentPage || 'dashboard') : 'members');
 }
 
 function applyRoleUI() {
-  const role = (currentUser?.role || '').toLowerCase();
-  const isStaff = role === 'admin' || role === 'staff';
-  $$('[data-staff-only]').forEach(el => el.style.display = isStaff ? '' : 'none');
-  $$('[data-member-only]').forEach(el => el.style.display = role === 'member' ? '' : 'none');
+  $$('.admin-only').forEach(el => { el.style.display = isAdmin() ? '' : 'none'; });
   const nameEl = document.getElementById('sidebar-user');
   if (nameEl && currentUser) nameEl.textContent = currentUser.full_name || currentUser.username || 'User';
   const roleEl = document.getElementById('sidebar-role');
@@ -116,7 +100,6 @@ async function doLogout() {
   showLogin();
 }
 
-/* ── Navigation ── */
 function navigate(page) {
   currentPage = page;
   $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.page === page));
@@ -124,24 +107,21 @@ function navigate(page) {
   const titles = {
     dashboard: 'DASHBOARD',
     members: 'MEMBER MANAGEMENT',
+    staff: 'STAFF MANAGEMENT',
     payments: 'PAYMENTS & SUBSCRIPTIONS',
     equipment: 'EQUIPMENT MANAGEMENT',
     security: 'DATA & SECURITY',
-    profile: 'MY PROFILE',
   };
   const titleEl = document.getElementById('pageTitle');
   if (titleEl) titleEl.textContent = titles[page] || page.toUpperCase();
-  switch (page) {
-    case 'dashboard': loadDashboard(); break;
-    case 'members':   loadMembers();   break;
-    case 'payments':  loadPayments();  break;
-    case 'equipment': loadEquipment(); break;
-    case 'security':  loadAudit();     break;
-    case 'profile':   loadProfile();   break;
-  }
+  if (page === 'dashboard') loadDashboard();
+  if (page === 'members') loadMembers();
+  if (page === 'staff') loadStaff();
+  if (page === 'payments') loadPayments();
+  if (page === 'equipment') loadEquipment();
+  if (page === 'security') loadAudit();
 }
 
-/* ── Data loaders ── */
 async function loadDashboard() {
   try {
     const json = await api('stats.php');
@@ -151,57 +131,56 @@ async function loadDashboard() {
     setText('stat-revenue', formatNaira(d.revenue ?? d.month_revenue ?? 0));
     setText('stat-equipment', d.equipment ?? d.equipment_count ?? '—');
     if (json.activity || d.activity) renderActivityFeed(json.activity || d.activity);
-  } catch (e) {
-    showToast(e.message || 'Failed to load dashboard', 'error');
-  }
+  } catch (e) { showToast(e.message || 'Failed to load dashboard', 'error'); }
 }
 
-async function loadMembers(q = '', plan = '') {
+async function loadMembers(q = '') {
   try {
-    const json = await api('members.php', 'GET', null, { q, plan });
-    renderMembers(json.data || []);
-  } catch (e) {
-    showToast(e.message || 'Failed to load members', 'error');
-  }
+    const json = await api('members.php', 'GET', null, { q });
+    membersCache = json.data || [];
+    renderMembers(membersCache);
+  } catch (e) { showToast(e.message || 'Failed to load members', 'error'); }
 }
 
 async function loadPayments() {
-  try {
-    const json = await api('payments.php');
-    renderPayments(json.data || []);
-  } catch (e) {
-    showToast(e.message || 'Failed to load payments', 'error');
-  }
+  try { renderPayments((await api('payments.php')).data || []); }
+  catch (e) { showToast(e.message || 'Failed to load payments', 'error'); }
 }
-
 async function loadEquipment() {
-  try {
-    const json = await api('equipment.php');
-    renderEquipment(json.data || []);
-  } catch (e) {
-    showToast(e.message || 'Failed to load equipment', 'error');
-  }
+  try { renderEquipment((await api('equipment.php')).data || []); }
+  catch (e) { showToast(e.message || 'Failed to load equipment', 'error'); }
 }
-
 async function loadAudit() {
+  try { renderAuditLog((await api('audit.php')).data || []); }
+  catch (e) { showToast(e.message || 'Failed to load audit log', 'error'); }
+}
+
+async function loadStaff() {
+  const tbody = document.getElementById('staff-tbody');
+  if (!tbody) return;
   try {
-    const json = await api('audit.php');
-    renderAuditLog(json.data || []);
+    const json = await api('staff.php');
+    const data = json.data || [];
+    tbody.innerHTML = data.length === 0 ? '<tr><td colspan="5" class="empty">No staff accounts yet.</td></tr>' : data.map(s => `
+      <tr>
+        <td>${s.username}</td><td>${s.full_name}</td><td>${s.role}</td>
+        <td>${formatDate(s.created_at)}</td>
+        <td>${s.role === 'superadmin' ? '' : `<button class="btn-sm btn-ghost" data-remove-staff="${s.id}">Remove</button>`}</td>
+      </tr>`).join('');
+    tbody.querySelectorAll('[data-remove-staff]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Remove this staff account?')) return;
+        try { await api('staff.php?id=' + btn.dataset.removeStaff, 'DELETE'); loadStaff(); showToast('Staff removed'); }
+        catch (e) { showToast(e.message, 'error'); }
+      });
+    });
   } catch (e) {
-    showToast(e.message || 'Failed to load audit log', 'error');
+    tbody.innerHTML = `<tr><td colspan="5">${e.message}</td></tr>`;
   }
 }
 
-async function loadProfile() {
-  // placeholder for member self-view if needed
-}
+function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
 
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
-}
-
-/* ── Renderers ── */
 function renderMembers(data = []) {
   const tbody = document.getElementById('members-tbody');
   if (!tbody) return;
@@ -212,14 +191,15 @@ function renderMembers(data = []) {
   tbody.innerHTML = data.map(m => `
     <tr data-id="${m.id}">
       <td><code>${m.member_code || ''}</code></td>
-      <td>${m.full_name || ''}</td>
+      <td><strong>${m.full_name || ''}</strong>${m.age ? `<div class="muted">Age ${m.age}${m.gender ? ' · ' + m.gender : ''}</div>` : ''}</td>
       <td>${m.phone || ''}</td>
       <td>${m.plan || ''}</td>
       <td><span class="badge badge-${(m.status || '').toLowerCase()}">${m.status || ''}</span></td>
-      <td>${formatDate(m.joined_at || m.created_at)}</td>
+      <td>${formatDate(m.start_date || m.joined_at || m.created_at)}</td>
       <td class="actions">
-        <button class="btn-sm btn-ghost" data-action="edit-member" data-id="${m.id}">Edit</button>
-        <button class="btn-sm btn-ghost" data-action="reset-login" data-id="${m.id}">Reset login</button>
+        <button class="btn-sm btn-ghost" data-action="view" data-id="${m.id}">View</button>
+        <button class="btn-sm btn-ghost" data-action="edit" data-id="${m.id}">Edit</button>
+        <button class="btn-sm btn-ghost" data-action="archive" data-id="${m.id}">Archive</button>
       </td>
     </tr>`).join('');
   tbody.querySelectorAll('[data-action]').forEach(btn => {
@@ -230,154 +210,157 @@ function renderMembers(data = []) {
 function renderPayments(data = []) {
   const tbody = document.getElementById('payments-tbody');
   if (!tbody) return;
-  if (!data.length) {
-    tbody.innerHTML = '<tr><td colspan="6" class="empty">No payments yet.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = data.map(p => `
-    <tr>
-      <td><code>${p.txn_code || p.id || ''}</code></td>
-      <td>${p.member_name || p.member_code || ''}</td>
-      <td>${p.plan || ''}</td>
-      <td>${formatNaira(p.amount)}</td>
-      <td>${p.method || ''}</td>
-      <td><span class="badge badge-${(p.status || 'pending').toLowerCase()}">${p.status || ''}</span></td>
-      <td>${formatDate(p.paid_at || p.created_at)}</td>
-    </tr>`).join('');
+  tbody.innerHTML = data.length === 0 ? '<tr><td colspan="7" class="empty">No payments yet.</td></tr>' : data.map(p => `
+    <tr><td><code>${p.txn_code || ''}</code></td><td>${p.member_name || p.member_code || ''}</td><td>${p.plan || ''}</td>
+    <td>${formatNaira(p.amount)}</td><td>${p.method || ''}</td>
+    <td>${p.status || ''}</td><td>${formatDate(p.paid_at || p.created_at)}</td></tr>`).join('');
 }
-
 function renderEquipment(data = []) {
   const tbody = document.getElementById('equipment-tbody');
   if (!tbody) return;
-  if (!data.length) {
-    tbody.innerHTML = '<tr><td colspan="5" class="empty">No equipment recorded.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = data.map(e => `
-    <tr>
-      <td>${e.name || ''}</td>
-      <td>${e.category || ''}</td>
-      <td>${e.quantity ?? '—'}</td>
-      <td><span class="badge badge-${(e.status || 'ok').toLowerCase()}">${e.status || ''}</span></td>
-      <td>${formatDate(e.last_maintained || e.updated_at)}</td>
-    </tr>`).join('');
+  tbody.innerHTML = data.length === 0 ? '<tr><td colspan="5" class="empty">No equipment recorded.</td></tr>' : data.map(e => `
+    <tr><td>${e.name || ''}</td><td>${e.category || ''}</td><td>${e.quantity ?? '—'}</td>
+    <td>${e.status || ''}</td><td>${formatDate(e.last_maintained || e.updated_at)}</td></tr>`).join('');
 }
-
 function renderActivityFeed(data = []) {
   const feed = document.getElementById('activity-feed');
   if (!feed) return;
-  if (!data.length) {
-    feed.innerHTML = '<div class="empty-state">No recent activity.</div>';
-    return;
-  }
-  feed.innerHTML = data.slice(0, 12).map(a => `
-    <div class="activity-item">
-      <div class="activity-icon">${a.icon || '•'}</div>
-      <div class="activity-body">
-        <div class="activity-text">${a.message || a.action || ''}</div>
-        <div class="activity-time">${formatDate(a.created_at)}</div>
-      </div>
-    </div>`).join('');
+  feed.innerHTML = data.length === 0 ? '<div class="empty-state">No recent activity.</div>' : data.slice(0, 12).map(a => `
+    <div class="activity-item"><div class="activity-text">${a.message || a.action || ''}</div>
+    <div class="activity-time">${formatDate(a.created_at || a.logged_at)}</div></div>`).join('');
 }
-
 function renderAuditLog(data = []) {
   const tbody = document.getElementById('audit-tbody');
   if (!tbody) return;
-  if (!data.length) {
-    tbody.innerHTML = '<tr><td colspan="5" class="empty">No audit entries.</td></tr>';
+  tbody.innerHTML = data.length === 0 ? '<tr><td colspan="5" class="empty">No audit entries.</td></tr>' : data.map(a => `
+    <tr><td>${formatDate(a.created_at || a.logged_at)}</td><td>${a.actor || a.by_user || '—'}</td>
+    <td>${a.action || ''}</td><td>${a.entity || ''}</td><td>${a.details || ''}</td></tr>`).join('');
+}
+
+function previewHtml(m) {
+  return `
+    <h3>${dash(m.full_name)} <small>(${dash(m.member_code)})</small></h3>
+    <p><strong>Status:</strong> ${dash(m.status)} &nbsp; <strong>Plan:</strong> ${dash(m.plan)}</p>
+    <h4>Personal Information</h4>
+    <p>Phone: ${dash(m.phone)}<br>Age: ${dash(m.age)} &nbsp; Gender: ${dash(m.gender)}<br>Address: ${dash(m.address)}</p>
+    <h4>Emergency Contact</h4>
+    <p>Name: ${dash(m.emergency_name)}<br>Phone: ${dash(m.emergency_phone)}<br>Relationship: ${dash(m.emergency_relationship)}</p>
+    <h4>Medical Information</h4>
+    <p>Medical condition: ${dash(m.has_medical_condition)}${m.medical_notes ? ' — ' + m.medical_notes : ''}<br>
+    Previous injury: ${dash(m.has_previous_injury)}${m.previous_injury_details ? ' — ' + m.previous_injury_details : ''}<br>
+    Taking medication: ${dash(m.taking_medication)}</p>
+    <h4>Fitness Information</h4>
+    <p>Goal: ${dash(m.fitness_goal)}<br>Previous gym experience: ${dash(m.previous_gym_experience)}</p>
+    <h4>Membership</h4>
+    <p>Plan: ${dash(m.plan)}<br>Start date: ${dash(m.start_date || m.joined_at)}<br>Payment: ${dash(m.payment_info)}</p>`;
+}
+
+function fillMemberForm(m) {
+  const form = document.getElementById('member-form');
+  if (!form) return;
+  form.reset();
+  if (!m) {
+    form.elements.plan.value = 'Monthly';
+    if (form.elements.start_date) form.elements.start_date.value = new Date().toISOString().slice(0, 10);
     return;
   }
-  tbody.innerHTML = data.map(a => `
-    <tr>
-      <td>${formatDate(a.created_at)}</td>
-      <td>${a.actor || a.user || '—'}</td>
-      <td>${a.action || ''}</td>
-      <td>${a.entity || a.target || ''}</td>
-      <td>${a.details || a.ip || ''}</td>
-    </tr>`).join('');
-}
-
-/* ── Member actions ── */
-async function handleMemberAction(action, id) {
-  if (action === 'reset-login') {
-    if (!confirm('Reset login credentials for this member? A temporary password will be shown once.')) return;
-    try {
-      const json = await api('members.php?action=reset_login', 'POST', { id: Number(id) });
-      const creds = json.credentials || json;
-      alert(`New credentials:\nUsername: ${creds.username || creds.member_code}\nTemp password: ${creds.temp_password || creds.password}\n\nShow this once to the member.`);
-      showToast('Login reset');
-    } catch (e) {
-      showToast(e.message || 'Reset failed', 'error');
-    }
-  } else if (action === 'edit-member') {
-    showToast('Edit member UI coming soon');
-  }
-}
-
-async function addMember(formData) {
-  try {
-    const json = await api('members.php?action=add', 'POST', formData);
-    showToast('Member added');
-    if (json.credentials) {
-      const c = json.credentials;
-      alert(`Member created.\nCode: ${c.member_code || json.member_code}\nUsername: ${c.username || ''}\nTemp password: ${c.temp_password || c.password || ''}\n\nShare these once with the member.`);
-    }
-    loadMembers();
-    closeModal('member-modal');
-  } catch (e) {
-    showToast(e.message || 'Could not add member', 'error');
-  }
-}
-
-/* ── Modal helpers ── */
-function openModal(id) {
-  document.getElementById(id)?.classList.add('open');
-}
-function closeModal(id) {
-  document.getElementById(id)?.classList.remove('open');
-}
-
-/* ── Init ── */
-function initApp() {
-  // Nav
-  $$('.nav-item[data-page]').forEach(item => {
-    item.addEventListener('click', () => navigate(item.dataset.page));
+  Object.keys(m).forEach(k => {
+    if (form.elements[k] != null && m[k] != null) form.elements[k].value = m[k];
   });
+  if (form.elements.start_date && (m.start_date || m.joined_at)) {
+    form.elements.start_date.value = String(m.start_date || m.joined_at).slice(0, 10);
+  }
+}
+
+function openMemberForm(member) {
+  previewMember = member || null;
+  const title = document.getElementById('member-modal-title');
+  const submit = document.getElementById('member-submit');
+  if (title) title.textContent = member ? 'Edit Member Information' : 'Gym Membership Registration Form';
+  if (submit) submit.textContent = member ? 'Save changes' : 'Register Member';
+  fillMemberForm(member);
+  openModal('member-modal');
+}
+
+function showPreview(member) {
+  previewMember = member;
+  const body = document.getElementById('member-preview-body');
+  if (body) body.innerHTML = previewHtml(member);
+  openModal('member-preview-modal');
+}
+
+async function handleMemberAction(action, id) {
+  const row = membersCache.find(m => String(m.id) === String(id));
+  if (action === 'view' && row) showPreview(row);
+  if (action === 'edit' && row) openMemberForm(row);
+  if (action === 'archive') {
+    const reason = prompt('Reason for archiving this member?');
+    if (!reason) return;
+    try {
+      await api('members.php?id=' + id, 'PUT', { archive: true, archive_reason: reason });
+      showToast('Member archived');
+      loadMembers();
+    } catch (e) { showToast(e.message || 'Archive failed', 'error'); }
+  }
+}
+
+async function saveMember(formData) {
+  try {
+    if (formData.id) {
+      const id = formData.id;
+      delete formData.id;
+      await api('members.php?id=' + id, 'PUT', formData);
+      showToast('Member details updated');
+    } else {
+      delete formData.id;
+      const json = await api('members.php', 'POST', formData);
+      showToast('Member registered' + (json.member_code ? ' — ' + json.member_code : ''));
+    }
+    closeModal('member-modal');
+    loadMembers();
+  } catch (e) {
+    showToast(e.message || 'Could not save member', 'error');
+  }
+}
+
+function openModal(id) { document.getElementById(id)?.classList.add('open'); }
+function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
+
+function initApp() {
+  $$('.nav-item[data-page]').forEach(item => item.addEventListener('click', () => navigate(item.dataset.page)));
   document.getElementById('logout-btn')?.addEventListener('click', doLogout);
   document.getElementById('login-btn')?.addEventListener('click', doLogin);
-  document.getElementById('login-pass')?.addEventListener('keydown', e => {
-    if (e.key === 'Enter') doLogin();
-  });
-
-  // Open login from marketing CTA
-  document.getElementById('open-login')?.addEventListener('click', () => {
-    document.getElementById('login-overlay')?.classList.remove('hidden');
-  });
-  document.getElementById('close-login')?.addEventListener('click', () => {
-    document.getElementById('login-overlay')?.classList.add('hidden');
-  });
-
-  // Add member form
-  document.getElementById('add-member-btn')?.addEventListener('click', () => openModal('member-modal'));
+  document.getElementById('login-pass')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('open-login')?.addEventListener('click', () => document.getElementById('login-overlay')?.classList.remove('hidden'));
+  document.getElementById('close-login')?.addEventListener('click', () => document.getElementById('login-overlay')?.classList.add('hidden'));
+  document.getElementById('add-member-btn')?.addEventListener('click', () => openMemberForm(null));
   document.getElementById('member-form')?.addEventListener('submit', e => {
     e.preventDefault();
     const fd = Object.fromEntries(new FormData(e.target).entries());
-    addMember(fd);
+    saveMember(fd);
+  });
+  document.getElementById('preview-edit-btn')?.addEventListener('click', () => {
+    closeModal('member-preview-modal');
+    if (previewMember) openMemberForm(previewMember);
+  });
+  document.getElementById('add-staff-btn')?.addEventListener('click', () => openModal('staff-modal'));
+  document.getElementById('staff-form')?.addEventListener('submit', async e => {
+    e.preventDefault();
+    const fd = Object.fromEntries(new FormData(e.target).entries());
+    try {
+      await api('staff.php', 'POST', fd);
+      closeModal('staff-modal');
+      showToast('Staff account created');
+      loadStaff();
+      e.target.reset();
+    } catch (err) { showToast(err.message, 'error'); }
   });
   document.querySelectorAll('[data-close-modal]').forEach(btn => {
     btn.addEventListener('click', () => closeModal(btn.dataset.closeModal));
   });
-
-  // Member search
-  document.getElementById('member-search')?.addEventListener('input', e => {
-    loadMembers(e.target.value.trim());
-  });
-
+  document.getElementById('member-search')?.addEventListener('input', e => loadMembers(e.target.value.trim()));
   checkSession();
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initApp);
-} else {
-  initApp();
-}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initApp);
+else initApp();
