@@ -3,228 +3,178 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NASME GYM — Staff Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
-  <title>NASME GYM — Management System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div id="landing-page">
-  <div class="ticker-bar">
-    <div class="ticker-inner" id="ticker">
-      <span>💪 Train Hard</span> &nbsp;·&nbsp; Push Your Limits &nbsp;·&nbsp; <span>🏆 Achieve More</span> &nbsp;·&nbsp; Stay Consistent &nbsp;·&nbsp; <span>🔥 No Excuses</span> &nbsp;·&nbsp; Earn Your Rest &nbsp;·&nbsp; <span>⚡ NASME GYM</span> &nbsp;·&nbsp; Nigeria's Finest &nbsp;·&nbsp;
-    </div>
-  </div>
-  <header class="hero">
-    <div class="nav_bar">
-      <div class="nav_uno">
-        <img class="logo_img" src="assets/logo.png" onerror="this.style.display='none'" alt="NASME GYM Logo" />
-        <span class="gym-name-nav">NASME GYM</span>
-      </div>
-      <nav class="nav_links">
-        <a href="#">Home</a>
-        <a href="#services">Services</a>
-        <a href="#about">About</a>
-        <a href="#pricing">Membership</a>
-      </nav>
-      <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu">&#9776;</button>
-      <div class="nav-cta-group">
-        <a class="btn-outline btn-nav-sm" id="nav-login-btn" href="#">Log In</a>
-        <a class="btn-maroon btn-nav-sm" href="#pricing">Start Free Trial</a>
-      </div>
-    </div>
-    <div class="hero-badge"><span></span> Nigeria's #1 Gym Management Platform</div>
-    <div class="hero-title">PUSH YOUR<br><em>LIMITS</em><br>WITH US</div>
-    <p class="hero-sub">More than a gym — a community built around your goals. Join thousands of members pushing boundaries every single day.</p>
-    <div class="hero-actions">
-      <a class="btn-maroon" href="#pricing">Join Now — It's Free</a>
-      <a class="btn-outline" href="#about">See How It Works</a>
-    </div>
-    <div class="extras"><div class="extras-row">
-      <a href="#">💪 Personal Training</a>
-      <a href="#">🏃 Cardio Zone</a>
-      <a href="#">🧘 Group Classes</a>
-      <a href="#">🥊 Boxing Studio</a>
-      <a href="#">📅 View Schedule</a>
-      <a href="#">💻 Online Classes</a>
-    </div></div>
-    <div class="mobile-nav-drawer" id="mobile-nav-drawer">
-      <button class="mobile-nav-close" id="mobile-nav-close">&#x2715;</button>
-      <nav class="mobile-nav-links">
-        <a href="#" id="mob-login-link">Log In</a>
-        <a href="#services">Services</a>
-        <a href="#about">About</a>
-        <a href="#pricing">Membership</a>
-        <a class="btn-maroon mob-trial-btn" href="#pricing">Start Free Trial</a>
-      </nav>
-    </div>
+
+<main id="site-main">
+  <header class="site-header">
+    <div class="brand">NASME <span>GYM</span></div>
+    <button class="btn btn-primary" id="open-login">Staff / Member Login</button>
   </header>
-  <div class="stats-strip">
-    <div class="strip-stat"><div class="strip-num">2,400+</div><div class="strip-label">Active Members</div></div>
-    <div class="strip-stat"><div class="strip-num">12</div><div class="strip-label">Expert Trainers</div></div>
-    <div class="strip-stat"><div class="strip-num">38+</div><div class="strip-label">Equipment Pieces</div></div>
-    <div class="strip-stat"><div class="strip-num">5★</div><div class="strip-label">Member Rating</div></div>
-  </div>
-  <section class="services-section" id="services">
-    <div class="section-eyebrow">What We Offer</div>
-    <div class="section-title">WORLD-CLASS FACILITIES</div>
-    <p class="section-sub">Everything you need to reach your fitness goals, under one roof.</p>
-    <div class="services-grid">
-      <div class="service-card"><div class="service-icon">🏋️</div><div class="service-name">STRENGTH TRAINING</div><p class="service-desc">State-of-the-art weight racks, machines, and free weights designed for every skill level.</p></div>
-      <div class="service-card"><div class="service-icon">🧑‍🏫</div><div class="service-name">PERSONAL TRAINING</div><p class="service-desc">One-on-one sessions with certified coaches who design custom plans around your goals.</p></div>
-      <div class="service-card"><div class="service-icon">🧘</div><div class="service-name">GROUP CLASSES</div><p class="service-desc">High-energy classes from Zumba and Yoga to HIIT and Spin.</p></div>
-      <div class="service-card"><div class="service-icon">🥊</div><div class="service-name">BOXING STUDIO</div><p class="service-desc">Heavy bags, pads, and coach-led sessions for cardio and confidence.</p></div>
-      <div class="service-card"><div class="service-icon">💻</div><div class="service-name">ONLINE CLASSES</div><p class="service-desc">Stream live and on-demand classes from home with your membership.</p></div>
-      <div class="service-card"><div class="service-icon">🥗</div><div class="service-name">NUTRITION PLANS</div><p class="service-desc">Personalised meal plans to complement your training.</p></div>
-    </div>
+  <section class="hero">
+    <h1>TRAIN HARD.<br><em>STAY STRONG.</em></h1>
+    <p>Staff dashboard and member portal for NASME Fitness Gym.</p>
   </section>
-  <section class="about-section" id="about">
-    <div class="about-text">
-      <div class="section-eyebrow">Our Story</div>
-      <div class="section-title">YOUR FITNESS MATTERS TO US</div>
-      <p>We started NASME GYM with one belief: every person deserves access to a world-class fitness environment.</p>
-      <ul>
-        <li>Open 6 AM – 10 PM, seven days a week</li>
-        <li>Certified trainers with proven track records</li>
-        <li>Clean, spacious, air-conditioned facilities</li>
-        <li>No hidden fees — transparent pricing always</li>
-        <li>Nigerian-owned and community-driven</li>
-      </ul>
-    </div>
-    <div class="about-imgs">
-      <img src="https://i.pinimg.com/736x/39/a1/11/39a1117cb2860eb0538b2f140449e3e9.jpg" alt="Gym floor" />
-      <img src="https://i1-c.pinimg.com/1200x/3a/0e/d7/3a0ed7f4a7d9332869ec6848ff7e3b0a.jpg" alt="Training" />
-      <img src="https://i.pinimg.com/736x/00/70/75/0070753dbca491932709d7eb4438aa7c.jpg" alt="Weights" />
-    </div>
-  </section>
-  <section class="pricing-section" id="pricing">
-    <div class="section-eyebrow">Membership Plans</div>
-    <div class="section-title">SIMPLE, FAIR PRICING</div>
-    <div class="pricing-grid">
-      <div class="price-card"><div class="price-plan">Weekly</div><div class="price-amount">₦5K</div><div class="price-period">per week</div><ul class="price-features"><li>Full gym access</li><li>Group classes (2/week)</li><li>Locker access</li></ul><a class="btn-outline">Get Started</a></div>
-      <div class="price-card featured"><div class="price-plan">Monthly</div><div class="price-amount">₦12K</div><div class="price-period">per month</div><ul class="price-features"><li>Full gym access</li><li>Unlimited group classes</li><li>1 PT session/month</li></ul><a class="btn-maroon">Get Started</a></div>
-      <div class="price-card"><div class="price-plan">Yearly</div><div class="price-amount">₦100K</div><div class="price-period">per year — save 30%</div><ul class="price-features"><li>Everything in Monthly</li><li>4 PT sessions/month</li><li>Priority class booking</li></ul><a class="btn-outline">Get Started</a></div>
-    </div>
-  </section>
-  <div class="admin-entry">
-    <div class="entry-split">
-      <div class="entry-box">
-        <div class="entry-icon">👤</div>
-        <h3>Member Portal</h3>
-        <p>Already a member? Log in to view your membership and payment history.</p>
-        <button class="btn-outline btn-entry" id="open-member-login-btn">Member Log In</button>
-      </div>
-      <div class="entry-box entry-box--dark">
-        <div class="entry-icon">⚡</div>
-        <h3>Staff & Admin</h3>
-        <p>Manage members, payments, equipment, and staff from one dashboard.</p>
-        <button class="btn-maroon btn-entry" id="open-dashboard-btn">Open Dashboard</button>
-      </div>
-    </div>
-  </div>
-  <footer class="site-footer">
-    <div>
-      <div class="footer-brand">NASME GYM</div>
-      <div class="footer-copy">&copy; 2026 NASME GYM. All rights reserved. Lagos, Nigeria.</div>
-    </div>
-  </footer>
-</div>
+</main>
 
-<div id="login-overlay">
-  <div class="login-card">
-    <div class="login-panel-left">
-      <div class="lpl-brand">NASME GYM</div>
-      <div class="lpl-headline">WELCOME<br><em>BACK,</em><br>CHAMPION.</div>
+<div id="login-overlay" class="modal-overlay hidden">
+  <div class="modal login-modal">
+    <div class="modal-header">
+      <h2>Sign In</h2>
+      <button class="modal-close" id="close-login">&times;</button>
     </div>
-    <div class="login-panel-right">
-      <button class="login-close">✕</button>
-      <div class="login-title">Sign In</div>
-      <div class="login-subtitle">Enter your credentials to continue</div>
-      <div class="login-error" id="login-error">Login failed. Please try again.</div>
-      <div class="login-field"><label>Username</label><input type="text" id="login-user" placeholder="e.g. admin" autocomplete="username" /></div>
-      <div class="login-field"><label>Password</label><input type="password" id="login-pass" placeholder="Enter your password" autocomplete="current-password" /><button class="pw-toggle" type="button" id="pw-eye">👁</button></div>
-      <button class="login-btn" id="login-submit"><span class="btn-text">Sign In →</span><span class="btn-spinner">Signing in...</span></button>
+    <p class="login-sub">Staff, admin, or member login</p>
+    <div id="login-error" class="form-error"></div>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="login-user" autocomplete="username" placeholder="Username or member code" />
     </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-pass" autocomplete="current-password" placeholder="Password" />
+    </div>
+    <button class="btn btn-primary btn-block" id="login-btn">Sign In</button>
   </div>
 </div>
 
-<div id="dashboard-app">
-  <div class="dash-root">
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-logo"><div class="logo-text">NASME GYM</div><div class="logo-sub">Management System</div></div>
-      <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar">A</div>
-        <div class="user-info">
-          <div class="user-name" id="user-name">Admin User</div>
-          <div class="user-role" id="user-role">Super Admin</div>
+<div id="dashboard-app" class="hidden">
+  <aside class="sidebar">
+    <div class="sidebar-brand">NASME <span>GYM</span></div>
+    <div class="sidebar-user-block">
+      <div class="sidebar-user" id="sidebar-user">User</div>
+      <div class="sidebar-role" id="sidebar-role">STAFF</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" data-page="dashboard"><span class="nav-icon">⚡</span> Dashboard</div>
+      <div class="nav-item" data-page="members" data-staff-only><span class="nav-icon">👥</span> Member Management</div>
+      <div class="nav-item" data-page="payments" data-staff-only><span class="nav-icon">💳</span> Payments & Subscriptions</div>
+      <div class="nav-item" data-page="equipment" data-staff-only><span class="nav-icon">🏋️</span> Equipment Management</div>
+      <div class="nav-item" data-page="security" data-staff-only><span class="nav-icon">🔐</span> Data & Security</div>
+      <div class="nav-item" data-page="profile" data-member-only><span class="nav-icon">👤</span> My Profile</div>
+    </nav>
+    <button class="logout-btn" id="logout-btn">Log Out</button>
+  </aside>
+
+  <div class="main-panel">
+    <header class="topbar">
+      <div class="page-title" id="pageTitle">DASHBOARD</div>
+      <span class="status-dot"></span> Live
+    </header>
+
+    <div class="pages">
+      <div class="page active" id="page-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-label">Members</div><div class="stat-value" id="stat-members">—</div></div>
+          <div class="stat-card"><div class="stat-label">Active</div><div class="stat-value" id="stat-active">—</div></div>
+          <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-value" id="stat-revenue">—</div></div>
+          <div class="stat-card"><div class="stat-label">Equipment</div><div class="stat-value" id="stat-equipment">—</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Recent Activity</div>
+          <div id="activity-feed" class="activity-feed"></div>
         </div>
       </div>
-      <nav class="nav-dash">
-        <div class="nav-item admin-only active" data-page="dashboard"><span class="nav-icon">⚡</span> Dashboard</div>
-        <div class="nav-item" data-page="members"><span class="nav-icon">👥</span> Member Management</div>
-        <div class="nav-item admin-only" data-page="staff"><span class="nav-icon">👨‍💼</span> Staff Management</div>
-        <div class="nav-item admin-only" data-page="payments"><span class="nav-icon">💳</span> Payments</div>
-        <div class="nav-item admin-only" data-page="security"><span class="nav-icon">🔐</span> Data & Security</div>
-        <div class="nav-item admin-only" data-page="equipment"><span class="nav-icon">🏋️</span> Equipment</div>
-      </nav>
-      <div class="back-to-site"><span class="nav-icon">🌐</span> Back to Website</div>
-      <div class="logout-btn"><span class="nav-icon">🚪</span> Log Out</div>
-    </aside>
-    <div class="main">
-      <header class="topbar">
-        <div class="topbar-left"><button class="menu-toggle">☰</button><div class="page-title" id="pageTitle">DASHBOARD</div></div>
-      </header>
-      <div class="content">
-        <div class="alert" id="alert"></div>
-        <div class="page active" id="page-dashboard">
-          <div class="welcome-banner"><div class="wb-left"><h3 id="wb-greeting">Good morning</h3><p>Here's what's happening at NASME GYM today.</p></div><div class="wb-time" id="wb-time"></div></div>
-          <div class="stats-grid">
-            <div class="stat-card"><div class="stat-label">Total Members</div><div class="stat-value" id="dash-members">0</div></div>
-            <div class="stat-card"><div class="stat-label">Monthly Revenue</div><div class="stat-value" id="dash-revenue">₦0</div></div>
-            <div class="stat-card"><div class="stat-label">Equipment Items</div><div class="stat-value" id="dash-equipment">0</div></div>
-            <div class="stat-card"><div class="stat-label">Pending Orders</div><div class="stat-value" id="dash-orders">0</div></div>
-          </div>
-          <div class="card"><div class="card-header"><div class="card-title">Recent Activity</div></div><div id="activityFeed"></div></div>
+
+      <div class="page" id="page-members">
+        <div class="toolbar">
+          <input type="search" id="member-search" placeholder="Search members..." />
+          <button class="btn btn-primary" id="add-member-btn">+ Add Member</button>
         </div>
-        <div class="page" id="page-members">
-          <div class="card">
-            <div class="card-header"><div class="card-title">All Members</div><button class="btn btn-primary btn-sm" id="btn-add-member">+ Add Member</button></div>
-            <div class="table-wrap"><table><thead><tr><th>ID</th><th>Full Name</th><th>Plan</th><th>Status</th><th>Check-ins</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="members-tbody"></tbody></table></div>
-          </div>
+        <div class="card table-wrap">
+          <table>
+            <thead>
+              <tr><th>Code</th><th>Name</th><th>Phone</th><th>Plan</th><th>Status</th><th>Joined</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="members-tbody"></tbody>
+          </table>
         </div>
-        <div class="page" id="page-staff">
-          <div class="card">
-            <div class="card-header"><div class="card-title">Staff Accounts</div><button class="btn btn-primary btn-sm" id="btn-add-staff">+ Add Staff</button></div>
-            <div class="table-wrap"><table><thead><tr><th>Username</th><th>Full name</th><th>Role</th><th>Created</th><th></th></tr></thead><tbody id="staff-tbody"></tbody></table></div>
-          </div>
+      </div>
+
+      <div class="page" id="page-payments">
+        <div class="card table-wrap">
+          <table>
+            <thead>
+              <tr><th>Txn</th><th>Member</th><th>Plan</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th></tr>
+            </thead>
+            <tbody id="payments-tbody"></tbody>
+          </table>
         </div>
-        <div class="page" id="page-payments">
-          <div class="card">
-            <div class="card-header"><div class="card-title">Transaction History</div><button class="btn btn-primary btn-sm" id="btn-add-payment">+ Record Payment</button></div>
-            <div class="table-wrap"><table><thead><tr><th>Txn ID</th><th>Member</th><th>Plan</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th></tr></thead><tbody id="payments-tbody"></tbody></table></div>
-          </div>
+      </div>
+
+      <div class="page" id="page-equipment">
+        <div class="card table-wrap">
+          <table>
+            <thead>
+              <tr><th>Name</th><th>Category</th><th>Qty</th><th>Status</th><th>Last Maint.</th></tr>
+            </thead>
+            <tbody id="equipment-tbody"></tbody>
+          </table>
         </div>
-        <div class="page" id="page-security">
-          <div class="card"><div class="card-header"><div class="card-title">Audit Log</div></div><div id="audit-log"></div></div>
+      </div>
+
+      <div class="page" id="page-security">
+        <div class="card table-wrap">
+          <table>
+            <thead>
+              <tr><th>When</th><th>Actor</th><th>Action</th><th>Target</th><th>Details</th></tr>
+            </thead>
+            <tbody id="audit-tbody"></tbody>
+          </table>
         </div>
-        <div class="page" id="page-equipment">
-          <div class="card">
-            <div class="card-header"><div class="card-title">Equipment Inventory</div><button class="btn btn-primary btn-sm" id="btn-add-equipment">+ Add Equipment</button></div>
-            <div class="equip-grid" id="equip-grid"></div>
-          </div>
+      </div>
+
+      <div class="page" id="page-profile">
+        <div class="card">
+          <div class="card-title">My Profile</div>
+          <p>Member profile view. Use the member portal for payments history.</p>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="member-modal"><div class="modal"><div class="modal-header"><div class="modal-title">ADD NEW MEMBER</div><button class="modal-close">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label>Full Name *</label><input type="text" id="m-name"/></div><div class="form-group"><label>Phone *</label><input type="text" id="m-phone"/></div><div class="form-group"><label>Plan *</label><select id="m-plan"><option>Daily</option><option>Weekly</option><option>Monthly</option><option>Yearly</option></select></div><div class="form-group"><label>Email</label><input type="email" id="m-email"/></div><div class="form-group"><label>Date of Birth</label><input type="date" id="m-dob"/></div><div class="form-group"><label>Gender</label><select id="m-gender"><option>Male</option><option>Female</option><option>Other</option></select></div><div class="form-group"><label>Emergency Contact</label><input type="text" id="m-emergency"/></div><div class="form-group"><label>Fitness Goal</label><input type="text" id="m-goal"/></div><div class="form-group full"><label>Medical Conditions</label><textarea id="m-medical"></textarea></div></div></div><div class="modal-footer"><button class="btn btn-ghost" id="btn-cancel-member">Cancel</button><button class="btn btn-primary" id="btn-submit-member">Register Member</button></div></div></div>
-<div class="modal-overlay" id="payment-modal"><div class="modal"><div class="modal-header"><div class="modal-title">RECORD PAYMENT</div><button class="modal-close">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label>Member Name *</label><input type="text" id="p-name"/></div><div class="form-group"><label>Plan *</label><select id="p-plan"><option>Daily</option><option>Weekly</option><option>Monthly</option><option>Yearly</option></select></div><div class="form-group"><label>Amount (₦) *</label><input type="number" id="p-amount"/></div><div class="form-group"><label>Payment Method *</label><select id="p-method"><option>Cash</option><option>Card</option><option>Mobile Money</option><option>Bank Transfer</option></select></div></div></div><div class="modal-footer"><button class="btn btn-ghost" id="btn-cancel-payment">Cancel</button><button class="btn btn-primary" id="btn-submit-payment">Record Payment</button></div></div></div>
-<div class="modal-overlay" id="equipment-modal"><div class="modal"><div class="modal-header"><div class="modal-title">ADD EQUIPMENT</div><button class="modal-close">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label>Name *</label><input type="text" id="eq-name"/></div><div class="form-group"><label>Category *</label><select id="eq-cat"><option>Cardio</option><option>Strength</option><option>Flexibility</option><option>Free Weights</option><option>Accessories</option></select></div><div class="form-group"><label>Quantity *</label><input type="number" id="eq-qty" min="1"/></div><div class="form-group"><label>Condition</label><select id="eq-cond"><option>Excellent</option><option>Good</option><option>Fair</option><option>Needs Repair</option></select></div><div class="form-group"><label>Location</label><input type="text" id="eq-loc"/></div><div class="form-group"><label>Status</label><select id="eq-status"><option>Available</option><option>In Use</option><option>Under Maintenance</option><option>Retired</option></select></div></div></div><div class="modal-footer"><button class="btn btn-ghost" id="btn-cancel-equipment">Cancel</button><button class="btn btn-primary" id="btn-submit-equipment">Add Equipment</button></div></div></div>
-<div class="modal-overlay" id="archive-modal"><div class="modal"><div class="modal-header"><div class="modal-title">ARCHIVE MEMBER</div><button class="modal-close" id="archive-x">✕</button></div><div class="modal-body"><p>This member leaves the list and cannot log in. They are not deleted.</p><div class="form-group"><label>Reason for archiving *</label><textarea id="archive-reason" rows="3"></textarea><input type="hidden" id="archive-member-id" /></div></div><div class="modal-footer"><button class="btn btn-ghost" id="btn-cancel-archive">Cancel</button><button class="btn btn-danger" id="btn-confirm-archive">Archive member</button></div></div></div>
-<div class="modal-overlay" id="staff-modal"><div class="modal"><div class="modal-header"><div class="modal-title">ADD STAFF</div><button class="modal-close" id="staff-x">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label>Full name *</label><input id="staff-full-name" type="text" /></div><div class="form-group"><label>Username *</label><input id="staff-username" type="text" /></div><div class="form-group"><label>Password *</label><input id="staff-password" type="text" /></div><div class="form-group"><label>Role</label><select id="staff-role"><option value="staff">Staff</option><option value="admin">Admin</option></select></div></div></div><div class="modal-footer"><button class="btn btn-ghost" id="btn-cancel-staff">Cancel</button><button class="btn btn-primary" id="btn-save-staff">Save staff</button></div></div></div>
-<script src="https://cdn.jsdelivr.net/gh/Deviant08/NASME-fitness-gym-frontend@32d28bdc21c77fd0113b0a0f4626326e81f57fc1/app.js"></script>
-<script src="ui-fix.js"></script>
+<div id="member-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Add Member</h2>
+      <button class="modal-close" data-close-modal="member-modal">&times;</button>
+    </div>
+    <form id="member-form">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input name="full_name" required />
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input name="phone" required />
+      </div>
+      <div class="form-group">
+        <label>Plan</label>
+        <select name="plan">
+          <option value="Monthly">Monthly</option>
+          <option value="Quarterly">Quarterly</option>
+          <option value="Annual">Annual</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="active">Active</option>
+          <option value="pending">Pending</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Create Member</button>
+    </form>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="app.js"></script>
 </body>
 </html>
