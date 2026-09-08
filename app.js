@@ -11,9 +11,10 @@
    CONFIG — change this one line when
    you go live on Railway
 ══════════════════════════════════════ */
-const API_BASE = 'http://localhost/nasme-gym/api';
+// const API_BASE = 'http://localhost/nasme-gym/api';
 // Live example:
-// const API_BASE = 'https://nasme-gym-backend.up.railway.app/api';
+const API_BASE = "https://nasme-fitness-gym-backend-production.up.railway.app/api";
+
 
 
 /* ══════════════════════════════════════
@@ -32,11 +33,21 @@ async function api(file, method = 'GET', body = null, params = {}) {
   };
   if (body && method !== 'GET') opts.body = JSON.stringify(body);
 
-  const res  = await fetch(url, opts);
-  const json = await res.json();
-
+  let res;
+  try {
+    res = await fetch(url, opts);
+  } catch (e) {
+    throw new Error('Cannot reach the backend. Check that Railway is live.');
+  }
+  const raw = await res.text();
+  let json = {};
+  try {
+    json = raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    throw new Error(res.ok ? 'Backend returned a non-JSON response.' : `Backend error (${res.status}). Is Railway running?`);
+  }
   if (!res.ok) {
-    throw new Error(json.error || `Request failed (${res.status})`);
+    throw new Error(json.error || json.message || `Request failed (${res.status})`);
   }
   return json;
 }
@@ -57,6 +68,7 @@ function openLoginScreen() {
   setTimeout(() => document.getElementById('login-user').focus(), 200);
 }
 
+window.openLoginScreen = openLoginScreen;
 function closeLoginScreen() {
   document.getElementById('login-overlay').classList.remove('open');
   document.getElementById('login-error').classList.remove('show');
@@ -69,21 +81,24 @@ async function attemptLogin() {
   const username = document.getElementById('login-user').value.trim().toLowerCase();
   const password = document.getElementById('login-pass').value;
 
+  const errBox = document.getElementById('login-error');
   if (!username || !password) {
-    document.getElementById('login-error').classList.add('show');
+    errBox.textContent = 'Please enter both username and password.';
+    errBox.classList.add('show');
     return;
   }
 
   /* Show spinner */
   btn.classList.add('loading');
   btn.disabled = true;
+  errBox.classList.remove('show');
 
   try {
     const json = await api('auth.php?action=login', 'POST', { username, password });
     loginSuccess(json.user);
   } catch (err) {
-    /* Wrong credentials or server error */
-    document.getElementById('login-error').classList.add('show');
+    errBox.textContent = '❌ ' + (err.message || 'Login failed. Please try again.');
+    errBox.classList.add('show');
     document.getElementById('login-pass').value = '';
     document.getElementById('login-pass').focus();
   } finally {
@@ -797,7 +812,7 @@ if (strip) {
    All wired via DOMContentLoaded —
    no inline onclick anywhere in HTML.
 ══════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', () => {
+function initApp() {
 
   renderTip();
 
@@ -905,7 +920,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-});
+};
 
 
 /* ════════════════════════════════════════
@@ -1126,3 +1141,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
