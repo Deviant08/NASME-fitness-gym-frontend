@@ -29,17 +29,41 @@
       <h2>Sign In</h2>
       <button class="modal-close" id="close-login">&times;</button>
     </div>
-    <p class="login-sub">Staff or admin login</p>
+
+    <div class="login-role-toggle" id="login-role-toggle">
+      <button type="button" class="role-pill active" data-role="staff">Staff</button>
+      <button type="button" class="role-pill" data-role="member">Member</button>
+    </div>
+
+    <p class="login-sub" id="login-sub">Staff or admin — username & password</p>
     <div id="login-error" class="form-error"></div>
-    <div class="form-group">
-      <label>Username</label>
-      <input type="text" id="login-user" autocomplete="username" placeholder="Username" />
+
+    <!-- Staff fields -->
+    <div id="login-fields-staff">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="login-user" autocomplete="username" placeholder="Username" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-pass" autocomplete="current-password" placeholder="Password" />
+      </div>
     </div>
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="login-pass" autocomplete="current-password" placeholder="Password" />
+
+    <!-- Member fields -->
+    <div id="login-fields-member" class="hidden">
+      <div class="form-group">
+        <label>Member code</label>
+        <input type="text" id="login-member-code" autocomplete="username" placeholder="e.g. MBR-001" />
+      </div>
+      <div class="form-group">
+        <label>Phone number</label>
+        <input type="tel" id="login-member-phone" autocomplete="tel" placeholder="Phone used at registration" />
+      </div>
     </div>
+
     <button class="btn btn-primary btn-block" id="login-btn">Sign In</button>
+    <p class="login-hint muted" id="login-hint" style="margin-top:1rem;font-size:1.2rem;color:var(--text-muted)">Members can also open member-portal.html directly.</p>
   </div>
 </div>
 
