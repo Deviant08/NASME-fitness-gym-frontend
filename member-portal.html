@@ -1,1 +1,513 @@
-<!DOCTYPE html><html><head><title>Member Portal</title></head><body>Clean member portal without store. See local.</body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <title>NASME GYM — Member Portal</title>
+  <style>
+
+    /* ── Palette (matches main site) ── */
+    :root {
+      --maroon:     #590a0a;
+      --maroon-lt:  #7a1010;
+      --maroon-dim: #3a0606;
+      --navy:       #1a1a50;
+      --navy-lt:    #252575;
+      --bg:         #0d0d1a;
+      --surface:    #13132b;
+      --surface2:   #1c1c38;
+      --surface3:   #252548;
+      --border:     #2e2e5a;
+      --text:       #f4f2f2;
+      --text-dim:   #a09fbc;
+      --text-muted: #5f5e7a;
+      --success:    #2ecc71;
+      --warning:    #e67e22;
+      --danger:     #c0392b;
+      --fd: 'Bebas Neue', sans-serif;
+      --fb: 'DM Sans', sans-serif;
+      --fm: 'JetBrains Mono', monospace;
+      --r:  6px;
+      --rl: 12px;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { font-size: 62.5%; }
+
+    body {
+      font-family: var(--fb);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1.4rem;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    a { text-decoration:none; color:unset; }
+
+    /* ── Topbar ── */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2.8rem;
+      height: 6.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 12px rgba(89,10,10,0.15);
+    }
+    .topbar-brand {
+      font-family: var(--fd);
+      font-size: 2.4rem;
+      letter-spacing: 2px;
+      color: var(--text);
+    }
+    .topbar-brand span { color: var(--maroon-lt); }
+
+    .topbar-right { display:flex; align-items:center; gap:1.6rem; }
+    .member-avatar {
+      width: 3.8rem; height: 3.8rem; border-radius: 50%;
+      background: linear-gradient(135deg, var(--maroon), var(--navy));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--fd); font-size: 1.6rem; color: var(--text);
+      flex-shrink: 0;
+    }
+    .member-name-top { font-size:1.3rem; font-weight:600; }
+    .member-code-top { font-family:var(--fm); font-size:1rem; color:var(--text-muted); }
+
+    .btn-logout {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-family: var(--fb);
+      font-size: 1.2rem;
+      padding: 0.6em 1.4em;
+      border-radius: var(--r);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { border-color:var(--danger); color:var(--danger); }
+
+    /* ── Main layout ── */
+    .portal-main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2.4rem 5rem;
+    }
+
+    /* ── Greeting ── */
+    .greeting { margin-bottom: 2.8rem; }
+    .greeting h1 {
+      font-family: var(--fd);
+      font-size: clamp(3rem, 5vw, 4.5rem);
+      letter-spacing: 2px;
+      line-height: 1;
+      margin-bottom: 0.6rem;
+    }
+    .greeting h1 em { color: var(--maroon-lt); font-style:normal; }
+    .greeting p { font-size: 1.4rem; color: var(--text-dim); }
+
+    /* ── Membership card ── */
+    .membership-card {
+      background: linear-gradient(135deg, var(--maroon-dim) 0%, var(--navy) 100%);
+      border: 1px solid rgba(89,10,10,0.4);
+      border-radius: var(--rl);
+      padding: 2.8rem 3rem;
+      margin-bottom: 2.4rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .membership-card::before {
+      content: '';
+      position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: rgba(89,10,10,0.15); pointer-events:none;
+    }
+    .mc-label {
+      font-family: var(--fm); font-size: 1rem;
+      color: rgba(244,242,242,0.5); letter-spacing: 3px;
+      text-transform: uppercase; margin-bottom: 0.6rem;
+    }
+    .mc-name {
+      font-family: var(--fd); font-size: clamp(2.8rem, 4vw, 4rem);
+      letter-spacing: 1px; line-height: 1; margin-bottom: 0.8rem;
+    }
+    .mc-code {
+      font-family: var(--fm); font-size: 1.3rem;
+      color: rgba(244,242,242,0.6);
+    }
+    .mc-right { text-align: right; }
+    .mc-plan {
+      font-family: var(--fd); font-size: 2.8rem;
+      color: var(--text); letter-spacing: 1px; line-height: 1;
+      margin-bottom: 0.6rem;
+    }
+    .mc-joined {
+      font-size: 1.2rem; color: rgba(244,242,242,0.5);
+    }
+    .mc-status {
+      display: inline-block;
+      padding: 0.4em 1.2em;
+      border-radius: 2rem;
+      font-family: var(--fm); font-size: 1rem;
+      font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; margin-top: 0.8rem;
+    }
+    .mc-status.active    { background:rgba(46,204,113,0.2); color:var(--success); }
+    .mc-status.expired   { background:rgba(192,57,43,0.2);  color:var(--danger); }
+    .mc-status.pending   { background:rgba(230,126,34,0.2); color:var(--warning); }
+    .mc-status.suspended { background:rgba(95,94,122,0.2);  color:var(--text-muted); }
+
+    /* ── Stats row ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.6rem;
+      margin-bottom: 2.4rem;
+    }
+    .stat-mini {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--rl);
+      padding: 1.8rem 2rem;
+      transition: border-color 0.2s;
+    }
+    .stat-mini:hover { border-color: var(--maroon); }
+    .stat-mini-label {
+      font-family: var(--fm); font-size: 1rem;
+      color: var(--text-muted); letter-spacing: 2px;
+      text-transform: uppercase; margin-bottom: 0.8rem;
+    }
+    .stat-mini-value {
+      font-family: var(--fd); font-size: 3.2rem;
+      color: var(--maroon-lt); line-height: 1;
+    }
+    .stat-mini-sub { font-size: 1.1rem; color: var(--text-dim); margin-top: 0.4rem; }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex; gap: 0.4rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+    .tab-btn {
+      background: none; border: none; border-bottom: 2px solid transparent;
+      color: var(--text-muted); font-family: var(--fb);
+      font-size: 1.35rem; font-weight: 600;
+      padding: 1em 1.6em; cursor: pointer;
+      transition: all 0.2s; margin-bottom: -1px;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--text); border-bottom-color: var(--maroon-lt); }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--rl);
+      padding: 2.2rem;
+      margin-bottom: 1.6rem;
+    }
+    .card-title {
+      font-family: var(--fd); font-size: 2rem;
+      letter-spacing: 1px; margin-bottom: 1.6rem; color: var(--text);
+    }
+
+    /* ── Table ── */
+    .table-wrap { overflow-x: auto; }
+    table { width:100%; border-collapse:collapse; }
+    th {
+      font-family: var(--fm); font-size: 1rem;
+      color: var(--text-muted); letter-spacing: 2px;
+      text-transform: uppercase; padding: 1rem 1.4rem;
+      text-align: left; border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 1.3rem 1.4rem;
+      border-bottom: 1px solid rgba(46,46,90,0.5);
+      font-size: 1.3rem; color: var(--text-dim);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface2); color: var(--text); }
+
+    /* ── Badge ── */
+    .badge {
+      display:inline-block; padding:3px 9px; border-radius:2px;
+      font-family:var(--fm); font-size:1rem;
+      font-weight:600; letter-spacing:1px; text-transform:uppercase;
+    }
+    .badge-active    { background:rgba(46,204,113,0.15); color:var(--success); }
+    .badge-expired   { background:rgba(192,57,43,0.15);  color:var(--danger); }
+    .badge-pending   { background:rgba(230,126,34,0.15); color:var(--warning); }
+    .badge-completed { background:rgba(46,204,113,0.15); color:var(--success); }
+    .badge-shipped   { background:rgba(26,26,80,0.35);   color:#9090e0; }
+    .badge-delivered { background:rgba(46,204,113,0.15); color:var(--success); }
+
+
+    /* ── Alert ── */
+    .alert {
+      display:none; padding:1.2rem 1.8rem;
+      border-radius:var(--r); font-size:1.3rem;
+      margin-bottom:1.6rem; border-left:3px solid;
+      animation: fadeIn 0.2s ease;
+    }
+    .alert.show { display:flex; align-items:center; gap:1rem; }
+    .alert-success { background:rgba(46,204,113,0.08); color:var(--success); border-color:var(--success); }
+    .alert-error   { background:rgba(192,57,43,0.08);  color:var(--danger);  border-color:var(--danger); }
+
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── Empty state ── */
+    .empty-state {
+      text-align:center; padding:4rem 2rem;
+      color:var(--text-muted); font-size:1.3rem;
+    }
+    .empty-state div { font-size:4rem; margin-bottom:1rem; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+    /* ── Responsive ── */
+    @media(max-width:640px) {
+      .membership-card { grid-template-columns:1fr; }
+      .mc-right { text-align:left; }
+      .stats-row { grid-template-columns:1fr 1fr; }
+      .topbar { padding:0 1.6rem; }
+      .portal-main { padding:2rem 1.6rem 5rem; }
+    }
+    @media(max-width:380px) {
+      .stats-row { grid-template-columns:1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ── Topbar ── -->
+<header class="topbar">
+  <div class="topbar-brand">NASME <span>GYM</span></div>
+  <div class="topbar-right">
+    <div>
+      <div class="member-name-top" id="portal-name">Loading...</div>
+      <div class="member-code-top" id="portal-code">MBR-000</div>
+    </div>
+    <div class="member-avatar" id="portal-avatar">?</div>
+    <button class="btn-logout" id="logout-btn">Log Out</button>
+  </div>
+</header>
+
+<!-- ── Main ── -->
+<main class="portal-main">
+
+  <div class="alert" id="portal-alert"></div>
+
+  <!-- Greeting -->
+  <div class="greeting">
+    <h1 id="portal-greeting">WELCOME <em>BACK</em></h1>
+    <p id="portal-sub">Here's your membership overview.</p>
+  </div>
+
+  <!-- Membership Card -->
+  <div class="membership-card" id="membership-card">
+    <div>
+      <div class="mc-label">Member Profile</div>
+      <div class="mc-name" id="mc-name">Loading...</div>
+      <div class="mc-code" id="mc-code">MBR-000</div>
+    </div>
+    <div class="mc-right">
+      <div class="mc-plan" id="mc-plan">—</div>
+      <div class="mc-joined" id="mc-joined">Joined —</div>
+      <div class="mc-status" id="mc-status">—</div>
+    </div>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="stats-row">
+    <div class="stat-mini">
+      <div class="stat-mini-label">Check-ins</div>
+      <div class="stat-mini-value" id="sm-checkins">—</div>
+      <div class="stat-mini-sub">Total visits</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-label">Payments</div>
+      <div class="stat-mini-value" id="sm-payments">—</div>
+      <div class="stat-mini-sub">Total transactions</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="payments">💳 Payments</button>
+  </div>
+
+  <div class="tab-panel active" id="tab-payments">
+    <div class="card">
+      <div class="card-title">PAYMENT HISTORY</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Txn ID</th><th>Plan</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th></tr>
+          </thead>
+          <tbody id="portal-payments-tbody">
+            <tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-muted)">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ════════════════════════════════════════
+   NASME GYM — Member Portal JS (no store)
+════════════════════════════════════════ */
+
+const API_BASE = 'https://nasme-fitness-gym-backend-production.up.railway.app/api';
+
+let currentMember = null;
+
+async function api(file, method = 'GET', body = null, params = {}) {
+  const url = new URL(`${API_BASE}/${file}`);
+  Object.entries(params || {}).forEach(([k, v]) => { if (v) url.searchParams.set(k, v); });
+  const opts = {
+    method,
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  if (body && method !== 'GET') opts.body = JSON.stringify(body);
+  const res  = await fetch(url, opts);
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
+  return json;
+}
+
+function showAlert(msg, type = 'success') {
+  const a = document.getElementById('portal-alert');
+  if (!a) return;
+  a.className = `alert alert-${type} show`;
+  a.innerHTML = `<span>${type === 'success' ? '✅' : '❌'}</span> ${msg}`;
+  setTimeout(() => a.classList.remove('show'), 4000);
+}
+
+async function checkSession() {
+  try {
+    const json = await api('member-auth.php?action=me');
+    if (json.member) {
+      currentMember = json.member;
+      showPortal();
+      loadProfile();
+    } else {
+      showLogin();
+    }
+  } catch (_) {
+    showLogin();
+  }
+}
+
+function showLogin() {
+  document.getElementById('login-screen')?.classList.remove('hidden');
+  document.getElementById('portal-app')?.classList.add('hidden');
+}
+
+function showPortal() {
+  document.getElementById('login-screen')?.classList.add('hidden');
+  document.getElementById('portal-app')?.classList.remove('hidden');
+}
+
+async function attemptLogin() {
+  const code  = document.getElementById('m-code')?.value.trim();
+  const phone = document.getElementById('m-phone')?.value.trim();
+  const err   = document.getElementById('login-error');
+  const btn   = document.getElementById('login-btn');
+  if (!code || !phone) {
+    if (err) { err.textContent = 'Enter your member code and phone number.'; err.classList.add('show'); }
+    return;
+  }
+  if (btn) { btn.disabled = true; btn.textContent = 'Signing in...'; }
+  if (err) err.classList.remove('show');
+  try {
+    const json = await api('member-auth.php?action=login', 'POST', { member_code: code, phone });
+    currentMember = json.member;
+    showPortal();
+    loadProfile();
+  } catch (e) {
+    if (err) { err.textContent = e.message || 'Login failed'; err.classList.add('show'); }
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Sign In →'; }
+  }
+}
+
+async function loadProfile() {
+  try {
+    const json = await api('member-auth.php?action=profile');
+    renderProfile(json.member, json.payments || []);
+  } catch (e) {
+    showAlert(e.message || 'Could not load profile', 'error');
+  }
+}
+
+function renderProfile(member, payments) {
+  currentMember = member;
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('portal-name', member.full_name);
+  set('portal-code', member.member_code);
+  set('portal-plan', member.plan);
+  set('portal-status', member.status);
+  set('sm-checkins', member.checkins ?? '—');
+  set('sm-payments', payments.length);
+
+  const tbody = document.getElementById('portal-payments-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = payments.length === 0
+    ? `<tr><td colspan="6"><div class="empty-state"><div>💳</div>No payments yet.</div></td></tr>`
+    : payments.map(p => `
+        <tr>
+          <td><span style="font-family:var(--fm);color:#9090e0">${p.txn_code || ''}</span></td>
+          <td>${p.plan || ''}</td>
+          <td style="font-family:var(--fm);color:var(--success)">₦${Number(p.amount || 0).toLocaleString()}</td>
+          <td>${p.method || ''}</td>
+          <td><span class="badge badge-${(p.status || '').toLowerCase() === 'completed' ? 'active' : 'pending'}">${p.status || ''}</span></td>
+          <td>${p.paid_at || ''}</td>
+        </tr>`).join('');
+}
+
+async function logout() {
+  try { await api('member-auth.php?action=logout', 'POST'); } catch (_) {}
+  currentMember = null;
+  showLogin();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('login-btn')?.addEventListener('click', attemptLogin);
+  document.getElementById('m-phone')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') attemptLogin();
+  });
+  document.getElementById('logout-btn')?.addEventListener('click', logout);
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = document.getElementById('tab-' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+  checkSession();
+});
+</script>
+</body>
+</html>
