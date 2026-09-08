@@ -4,7 +4,7 @@ let currentUser = null;
 let currentPage = 'dashboard';
 let membersCache = [];
 let previewMember = null;
-let editingMemberId = null; // explicit id while editing (not only hidden form field)
+let editingMemberId = null;
 
 async function api(file, method = 'GET', body = null, params = {}) {
   const [path, qs] = String(file).split('?');
@@ -50,6 +50,21 @@ function formatDate(d) {
   try { return new Date(d).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' }); }
   catch { return d; }
 }
+function formatDateTime(d) {
+  if (!d) return '—';
+  try {
+    return new Date(d).toLocaleString('en-NG', {
+      day: 'numeric', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit',
+    });
+  } catch { return d; }
+}
+
+/* Inline SVGs for activity meta */
+const SVG_WHO = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><circle cx="18" cy="6" r="3.2" fill="none"/><path d="M18 9.5v2.5M16.5 11h3"/></svg>`;
+// person + small ? badge feel: user circle with question mark accents
+const SVG_PERSON_Q = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="8" r="3.5"/><path d="M3.5 19c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6"/><circle cx="18.5" cy="7.5" r="3.2"/><path d="M18.5 6.2c.7 0 1.2.4 1.2 1.1 0 .6-.3.9-.8 1.2l-.3.2v.7"/><circle cx="18.5" cy="11.1" r=".55" fill="currentColor" stroke="none"/></svg>`;
+const SVG_CLOCK = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>`;
 
 function isAdmin() {
   const role = (currentUser?.role || '').toLowerCase();
@@ -157,9 +172,23 @@ async function loadDashboard() {
     const d = json.data || json;
     setText('stat-members', d.members ?? d.total_members ?? '—');
     setText('stat-active', d.active ?? d.active_members ?? '—');
-    setText('stat-revenue', formatNaira(d.revenue ?? d.month_revenue ?? 0));
-    setText('stat-equipment', d.equipment ?? d.equipment_count ?? '—');
-    if (json.activity || d.activity) renderActivityFeed(json.activity || d.activity);
+    setText('stat-revenue', formatNaira(d.revenue ?? d.monthly_revenue ?? d.month_revenue ?? 0));
+    setText('stat-equipment', d.equipment ?? d.equipment_total ?? d.equipment_count ?? '—');
+
+    // Prefer activity from stats; fall back to audit endpoint
+    let activity = json.activity || d.activity || [];
+    if (!activity.length) {
+      try {
+        const audit = await api('audit.php', 'GET', null, { limit: 15 });
+        activity = (audit.data || []).map(a => ({
+          action: a.action,
+          actor: a.by_user || a.actor || 'System',
+          logged_at: a.logged_at || a.created_at,
+          color_tag: a.color_tag,
+        }));
+      } catch (_) {}
+    }
+    renderActivityFeed(activity);
   } catch (e) { showToast(e.message || 'Failed to load dashboard', 'error'); }
 }
 
@@ -251,18 +280,34 @@ function renderEquipment(data = []) {
     <tr><td>${e.name || ''}</td><td>${e.category || ''}</td><td>${e.quantity ?? '—'}</td>
     <td>${e.status || ''}</td><td>${formatDate(e.last_maintained || e.updated_at)}</td></tr>`).join('');
 }
+
 function renderActivityFeed(data = []) {
   const feed = document.getElementById('activity-feed');
   if (!feed) return;
-  feed.innerHTML = data.length === 0 ? '<div class="empty-state">No recent activity.</div>' : data.slice(0, 12).map(a => `
-    <div class="activity-item"><div class="activity-text">${a.message || a.action || ''}</div>
-    <div class="activity-time">${formatDate(a.created_at || a.logged_at)}</div></div>`).join('');
+  if (!data.length) {
+    feed.innerHTML = '<div class="empty-state">No recent activity yet.</div>';
+    return;
+  }
+  feed.innerHTML = data.slice(0, 15).map(a => {
+    const who = a.actor || a.by_user || a.user || 'System';
+    const when = formatDateTime(a.logged_at || a.created_at);
+    const action = a.action || a.message || 'Activity';
+    return `
+      <div class="activity-item">
+        <div class="activity-action">${action}</div>
+        <div class="activity-meta">
+          <span class="activity-meta-row who" title="Who">${SVG_PERSON_Q}<span>${who}</span></span>
+          <span class="activity-meta-row when" title="When">${SVG_CLOCK}<span>${when}</span></span>
+        </div>
+      </div>`;
+  }).join('');
 }
+
 function renderAuditLog(data = []) {
   const tbody = document.getElementById('audit-tbody');
   if (!tbody) return;
   tbody.innerHTML = data.length === 0 ? '<tr><td colspan="5" class="empty">No audit entries.</td></tr>' : data.map(a => `
-    <tr><td>${formatDate(a.created_at || a.logged_at)}</td><td>${a.actor || a.by_user || '—'}</td>
+    <tr><td>${formatDateTime(a.created_at || a.logged_at)}</td><td>${a.actor || a.by_user || '—'}</td>
     <td>${a.action || ''}</td><td>${a.entity || ''}</td><td>${a.details || ''}</td></tr>`).join('');
 }
 
@@ -342,12 +387,9 @@ async function saveMember(formData) {
   try {
     const id = editingMemberId || formData.id || '';
     delete formData.id;
-
-    // Drop empty strings so we don't wipe optional fields with blanks unintentionally
     Object.keys(formData).forEach(k => {
       if (formData[k] === '') delete formData[k];
     });
-
     if (id) {
       await api('members.php?id=' + encodeURIComponent(id), 'PUT', formData);
       showToast('Member details updated');
