@@ -242,11 +242,24 @@
     </div>
   </section>
 
-  <!-- Admin Entry -->
+  <!-- Member Login + Admin Entry -->
   <div class="admin-entry">
-    <h2>STAFF &amp; ADMIN ACCESS</h2>
-    <p>Manage members, payments, equipment, and your store from one powerful dashboard.</p>
-    <button class="btn-maroon btn-dashboard-open" id="open-dashboard-btn">⚡ Open Dashboard</button>
+    <div class="entry-split">
+      <!-- Member login -->
+      <div class="entry-box">
+        <div class="entry-icon">👤</div>
+        <h3>Member Portal</h3>
+        <p>Already a member? Log in to view your membership, payment history, and shop the store.</p>
+        <button class="btn-outline btn-entry" id="open-member-login-btn">Member Log In</button>
+      </div>
+      <!-- Staff / Admin -->
+      <div class="entry-box entry-box--dark">
+        <div class="entry-icon">⚡</div>
+        <h3>Staff &amp; Admin</h3>
+        <p>Manage members, payments, equipment, and your store from one powerful dashboard.</p>
+        <button class="btn-maroon btn-entry" id="open-dashboard-btn">Open Dashboard</button>
+      </div>
+    </div>
   </div>
 
   <footer class="site-footer">
@@ -342,6 +355,64 @@
   </div>
 </div>
 
+
+<!-- ══════════════════════════════════════════
+     MEMBER LOGIN OVERLAY
+════════════════════════════════════════════ -->
+<div id="member-login-overlay">
+  <div class="login-card">
+
+    <!-- Left panel -->
+    <div class="login-panel-left">
+      <div>
+        <div class="lpl-brand">NASME GYM</div>
+        <div class="lpl-tag">Member Portal</div>
+      </div>
+      <div>
+        <div class="lpl-headline">WELCOME<br><em>BACK,</em><br>CHAMPION.</div>
+        <p class="lpl-sub">View your membership status, track your payments, and shop the gym store — all in one place.</p>
+        <ul class="lpl-perks">
+          <li>View membership details</li>
+          <li>Track payment history</li>
+          <li>Browse &amp; order from store</li>
+          <li>Check your plan status</li>
+        </ul>
+      </div>
+      <div class="lpl-footer-text">
+        Register physically at the gym to get your Member ID
+      </div>
+    </div>
+
+    <!-- Right panel -->
+    <div class="login-panel-right">
+      <button class="login-close" id="member-login-close">✕</button>
+
+      <div class="login-title">Member Sign In</div>
+      <div class="login-subtitle">Use your Member ID and registered phone number</div>
+
+      <div class="login-error" id="member-login-error">❌ Invalid Member ID or phone number.</div>
+
+      <div class="login-field">
+        <label>Member ID</label>
+        <input type="text" id="member-code-input" placeholder="e.g. MBR-001" autocomplete="off" />
+      </div>
+      <div class="login-field">
+        <label>Phone Number (your password)</label>
+        <input type="text" id="member-phone-input" placeholder="e.g. 08012345678" autocomplete="off" />
+      </div>
+
+      <button class="login-btn" id="member-login-submit">
+        <span class="btn-text">Sign In →</span>
+        <span class="btn-spinner">⏳ Signing in...</span>
+      </button>
+
+      <div class="login-hint">
+        Your <code>Member ID</code> and <code>phone number</code> are given to you when you register at the gym.
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════════
      DASHBOARD APP
@@ -593,6 +664,82 @@
   </div>
 </div>
 
+
+<!-- LOGIN CHOOSER — appears first when "Log In" is clicked -->
+<div class="modal-overlay" id="login-chooser">
+  <div class="modal" style="max-width:420px;text-align:center;">
+    <div class="modal-header" style="justify-content:center;border-bottom:none;padding-bottom:0;">
+      <div class="modal-title" style="font-size:2.2rem;">WHO ARE YOU?</div>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:1.2rem;padding-top:1.6rem;">
+      <button class="btn btn-primary" id="choose-member" style="padding:1.4em;font-size:1.4rem;border-radius:var(--radius);">
+        🏃 I'm a Member
+        <div style="font-size:1.1rem;font-weight:400;color:rgba(244,242,242,0.6);margin-top:4px">Login with member code + phone</div>
+      </button>
+      <button class="btn btn-ghost" id="choose-staff" style="padding:1.4em;font-size:1.4rem;border-radius:var(--radius);">
+        👑 I'm Staff / Admin
+        <div style="font-size:1.1rem;font-weight:400;color:var(--text-muted);margin-top:4px">Login with username + password</div>
+      </button>
+    </div>
+    <div class="modal-footer" style="justify-content:center;border-top:none;">
+      <button class="btn btn-ghost btn-sm" id="chooser-close">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- MEMBER LOGIN MODAL -->
+<div class="modal-overlay" id="member-login-overlay">
+  <div class="login-card">
+
+    <!-- Left panel -->
+    <div class="login-panel-left">
+      <div>
+        <div class="lpl-brand">NASME GYM</div>
+        <div class="lpl-tag">Member Portal</div>
+      </div>
+      <div>
+        <div class="lpl-headline">WELCOME<br><em>HOME,</em><br>CHAMPION.</div>
+        <p class="lpl-sub">Sign in to view your membership, track your payments, and shop the gym store.</p>
+        <ul class="lpl-perks">
+          <li>View membership status</li>
+          <li>Payment history</li>
+          <li>Browse &amp; order from store</li>
+          <li>Track your check-ins</li>
+        </ul>
+      </div>
+      <div class="lpl-footer-text">NASME GYM · Lagos, Nigeria · v1.0.0</div>
+    </div>
+
+    <!-- Right panel -->
+    <div class="login-panel-right">
+      <button class="login-close" id="member-login-close">✕</button>
+
+      <div class="login-title">Member Login</div>
+      <div class="login-subtitle">Enter your member code and phone number</div>
+
+      <div class="login-error" id="member-login-error">❌ Invalid member code or phone number.</div>
+
+      <div class="login-field">
+        <label>Member Code *</label>
+        <input type="text" id="ml-code" placeholder="e.g. MBR-001" autocomplete="off" />
+      </div>
+      <div class="login-field">
+        <label>Phone Number *</label>
+        <input type="text" id="ml-phone" placeholder="e.g. 08012345678" autocomplete="tel" />
+      </div>
+
+      <button class="login-btn" id="ml-submit">
+        <span class="btn-text">Sign In →</span>
+        <span class="btn-spinner">⏳ Signing in...</span>
+      </button>
+
+      <div class="login-hint">
+        Your member code was given to you when you registered at the gym.<br>
+        Your password is your registered phone number.
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="app.js"></script>
 </body>

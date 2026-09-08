@@ -11,9 +11,9 @@
    CONFIG — change this one line when
    you go live on Railway
 ══════════════════════════════════════ */
-// const API_BASE = "https://NASME fitness gym backend.railway.app/api";
+const API_BASE = 'http://localhost/nasme-gym/api';
 // Live example:
-const API_BASE = "https://nasme-fitness-gym-backend.up.railway.app/api";
+// const API_BASE = 'https://nasme-gym-backend.up.railway.app/api';
 
 
 /* ══════════════════════════════════════
@@ -904,5 +904,225 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.target === overlay) overlay.classList.remove('open');
     });
   });
+
+});
+
+
+/* ════════════════════════════════════════
+   MEMBER LOGIN
+════════════════════════════════════════ */
+
+/* Show login chooser instead of going straight to staff login */
+function openLoginChooser() {
+  document.getElementById('login-chooser').classList.add('open');
+}
+
+function closeLoginChooser() {
+  document.getElementById('login-chooser').classList.remove('open');
+}
+
+function openMemberLogin() {
+  closeLoginChooser();
+  document.getElementById('member-login-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('ml-code').focus(), 200);
+}
+
+function closeMemberLogin() {
+  document.getElementById('member-login-overlay').classList.remove('open');
+  document.getElementById('member-login-error').classList.remove('show');
+  document.getElementById('ml-code').value  = '';
+  document.getElementById('ml-phone').value = '';
+}
+
+async function attemptMemberLogin() {
+  const btn   = document.getElementById('ml-submit');
+  const code  = document.getElementById('ml-code').value.trim().toUpperCase();
+  const phone = document.getElementById('ml-phone').value.trim();
+
+  if (!code || !phone) {
+    document.getElementById('member-login-error').classList.add('show');
+    return;
+  }
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  try {
+    await api('member-auth.php?action=login', 'POST', {
+      member_code: code,
+      phone:       phone,
+    });
+    /* Success — redirect to member portal */
+    closeMemberLogin();
+    window.location.href = 'member-portal.html';
+  } catch (err) {
+    const errEl = document.getElementById('member-login-error');
+    errEl.innerHTML = `❌ ${err.message}`;
+    errEl.classList.add('show');
+    document.getElementById('ml-phone').value = '';
+    document.getElementById('ml-phone').focus();
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+/* ── Wire member login events inside DOMContentLoaded ── */
+document.addEventListener('DOMContentLoaded', () => {
+
+  /* Override nav login button to show chooser first */
+  const navLoginBtn = document.getElementById('nav-login-btn');
+  if (navLoginBtn) {
+    navLoginBtn.removeEventListener('click', openLoginScreen);
+    navLoginBtn.addEventListener('click', e => {
+      e.preventDefault();
+      openLoginChooser();
+    });
+  }
+
+  /* Override open-dashboard-btn too */
+  const dashBtn = document.getElementById('open-dashboard-btn');
+  if (dashBtn) {
+    dashBtn.removeEventListener('click', openLoginScreen);
+    dashBtn.addEventListener('click', openLoginChooser);
+  }
+
+  /* Override mobile nav login */
+  const mobLogin = document.getElementById('mob-login-link');
+  if (mobLogin) {
+    mobLogin.addEventListener('click', e => {
+      e.preventDefault();
+      document.getElementById('mobile-nav-drawer')?.classList.remove('open');
+      openLoginChooser();
+    });
+  }
+
+  /* Chooser buttons */
+  document.getElementById('choose-member')
+    ?.addEventListener('click', openMemberLogin);
+
+  document.getElementById('choose-staff')
+    ?.addEventListener('click', () => {
+      closeLoginChooser();
+      openLoginScreen();
+    });
+
+  document.getElementById('chooser-close')
+    ?.addEventListener('click', closeLoginChooser);
+
+  /* Close chooser on backdrop click */
+  document.getElementById('login-chooser')
+    ?.addEventListener('click', e => {
+      if (e.target === document.getElementById('login-chooser')) closeLoginChooser();
+    });
+
+  /* Member login modal */
+  document.getElementById('member-login-close')
+    ?.addEventListener('click', closeMemberLogin);
+
+  document.getElementById('ml-submit')
+    ?.addEventListener('click', attemptMemberLogin);
+
+  document.getElementById('ml-code')
+    ?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('ml-phone')?.focus();
+    });
+
+  document.getElementById('ml-phone')
+    ?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') attemptMemberLogin();
+    });
+
+  /* Close member login on backdrop click */
+  document.getElementById('member-login-overlay')
+    ?.addEventListener('click', e => {
+      if (e.target === document.getElementById('member-login-overlay')) closeMemberLogin();
+    });
+
+});
+
+
+/* ════════════════════════════════════════
+   MEMBER LOGIN
+════════════════════════════════════════ */
+
+function openMemberLogin() {
+  document.getElementById('member-login-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('member-code-input').focus(), 200);
+}
+
+function closeMemberLogin() {
+  document.getElementById('member-login-overlay').classList.remove('open');
+  document.getElementById('member-login-error').classList.remove('show');
+  document.getElementById('member-code-input').value = '';
+  document.getElementById('member-phone-input').value = '';
+}
+
+async function attemptMemberLogin() {
+  const btn        = document.getElementById('member-login-submit');
+  const memberCode = document.getElementById('member-code-input').value.trim().toUpperCase();
+  const phone      = document.getElementById('member-phone-input').value.trim();
+
+  if (!memberCode || !phone) {
+    document.getElementById('member-login-error').classList.add('show');
+    return;
+  }
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  try {
+    const json = await api('member-auth.php?action=login', 'POST', {
+      member_code: memberCode,
+      phone,
+    });
+
+    /* Success — go to member portal */
+    closeMemberLogin();
+    window.location.href = 'member-portal.html';
+
+  } catch (err) {
+    document.getElementById('member-login-error').textContent = `❌ ${err.message}`;
+    document.getElementById('member-login-error').classList.add('show');
+    document.getElementById('member-phone-input').value = '';
+    document.getElementById('member-phone-input').focus();
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+/* Wire member login events inside DOMContentLoaded */
+document.addEventListener('DOMContentLoaded', () => {
+
+  /* Open member login */
+  document.getElementById('open-member-login-btn')
+    ?.addEventListener('click', openMemberLogin);
+
+  /* Close member login */
+  document.getElementById('member-login-close')
+    ?.addEventListener('click', closeMemberLogin);
+
+  /* Submit */
+  document.getElementById('member-login-submit')
+    ?.addEventListener('click', attemptMemberLogin);
+
+  /* Enter key on member code → move to phone */
+  document.getElementById('member-code-input')
+    ?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('member-phone-input').focus();
+    });
+
+  /* Enter key on phone → submit */
+  document.getElementById('member-phone-input')
+    ?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') attemptMemberLogin();
+    });
+
+  /* Click outside member login overlay to close */
+  document.getElementById('member-login-overlay')
+    ?.addEventListener('click', e => {
+      if (e.target === document.getElementById('member-login-overlay')) closeMemberLogin();
+    });
 
 });

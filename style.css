@@ -1201,3 +1201,77 @@
   .nav_links        { display: none; }
   .nav-cta-group    { display: none; }
 }
+
+/* ════════════════════════════════════════
+   MEMBER LOGIN + ENTRY SECTION
+════════════════════════════════════════ */
+
+/* Entry split section */
+.entry-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.4rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.entry-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--rl);
+  padding: 3rem 2.4rem;
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.entry-box:hover {
+  border-color: var(--maroon);
+  box-shadow: 0 8px 28px rgba(89,10,10,0.18);
+}
+.entry-box--dark {
+  background: linear-gradient(135deg, var(--maroon-dim), var(--navy));
+  border-color: rgba(89,10,10,0.4);
+}
+.entry-icon {
+  font-size: 3.6rem;
+  margin-bottom: 1.2rem;
+}
+.entry-box h3 {
+  font-family: var(--fd);
+  font-size: 2.4rem;
+  letter-spacing: 1px;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+.entry-box p {
+  font-size: 1.3rem;
+  color: var(--text-dim);
+  margin-bottom: 2rem;
+  line-height: 1.65;
+}
+.btn-entry {
+  font-size: 1.2rem;
+  padding: 1em 2.8em;
+  border-radius: 3rem;
+  cursor: pointer;
+  font-family: var(--fb);
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+/* Member login overlay — reuses .login-card styles */
+#member-login-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(5,5,15,0.85);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+#member-login-overlay.open { display: flex; }
+
+@media (max-width: 640px) {
+  .entry-split { grid-template-columns: 1fr; }
+}
