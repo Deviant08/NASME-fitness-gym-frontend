@@ -69,13 +69,43 @@
     if (addStaff) addStaff.style.display = admin ? '' : 'none';
   }
 
+  function useSingleLoginSection() {
+    var split = document.querySelector('.admin-entry') || document.querySelector('.entry-split');
+    if (!split || split.dataset.singleLogin === '1') return;
+    split.dataset.singleLogin = '1';
+    split.innerHTML = '<div class="entry-box entry-box--dark" style="max-width:420px;margin:0 auto;text-align:center">' +
+      '<div class="entry-icon">⚡</div>' +
+      '<h3>Log In</h3>' +
+      '<p>Members, staff, and admin use the same sign in.</p>' +
+      '<button class="btn-maroon btn-entry" id="single-login-btn" type="button">Log In</button>' +
+      '</div>';
+  }
+
+  function scrubPoolCopy(root) {
+    root = root || document;
+    root.querySelectorAll('.service-card, .price-features li, a, p, span').forEach(function (el) {
+      if (!el.childElementCount && /pool/i.test(el.textContent || '')) {
+        el.textContent = (el.textContent || '')
+          .replace(/Full gym \+ pool access/gi, 'Full gym access')
+          .replace(/Swimming Pool/gi, 'Boxing Studio');
+      }
+    });
+  }
+
   function wireLandingButtons() {
     applyStaffAccess();
-    ['open-login','nav-login-btn','open-dashboard-btn','mob-login-link','open-member-login-btn'].forEach(function (id) {
+    useSingleLoginSection();
+    scrubPoolCopy();
+    ['open-login','nav-login-btn','open-dashboard-btn','mob-login-link','open-member-login-btn','single-login-btn'].forEach(function (id) {
       const el = document.getElementById(id);
       if (!el || el.dataset.wiredHome) return;
       el.dataset.wiredHome = '1';
       el.addEventListener('click', function (e) { e.preventDefault(); openLoginModal(); });
+    });
+    document.querySelectorAll('.price-card a, .price-card button, .pricing-section a, .pricing-section button').forEach(function (a) {
+      if (a.dataset.wiredHome) return;
+      a.dataset.wiredHome = '1';
+      a.addEventListener('click', function (e) { e.preventDefault(); openLoginModal(); });
     });
     document.getElementById('close-login')?.addEventListener('click', function (e) {
       e.preventDefault();
@@ -166,9 +196,6 @@
             if (name) name.textContent = 'BOXING STUDIO';
             if (desc) desc.textContent = 'Heavy bags, pads, and coach-led sessions for cardio, coordination, and confidence.';
           }
-        });
-        landing.querySelectorAll('a').forEach(function (a) {
-          if (/swim|pool/i.test(a.textContent)) a.textContent = a.textContent.replace(/Swimming Pool/i, 'Boxing Studio');
         });
         current.replaceWith(landing);
       }
