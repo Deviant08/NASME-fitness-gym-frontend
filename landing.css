@@ -1,0 +1,14 @@
+@import url("https://cdn.jsdelivr.net/gh/Deviant08/NASME-fitness-gym-frontend@32d28bdc21c77fd0113b0a0f4626326e81f57fc1/style.css");
+
+#landing-page.hidden { display: none !important; }
+#landing-page:not(.hidden) { display: block !important; }
+#dashboard-app.hidden { display: none !important; }
+#dashboard-app:not(.hidden) { display: flex !important; }
+
+.equip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.4rem; }
+.equip-card { background: #13132b; border: 1px solid #2e2e5a; border-radius: 12px; overflow: hidden; }
+.equip-photo { height: 140px; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: .6rem; }
+.eq-svg { width: 48px; height: 48px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.4)); }
+.equip-body { padding: 1.2rem; }
+.equip-name { font-weight: 600; font-size: 1.5rem; }
+.equip-meta, .equip-status { color: #a09fbc; font-size: 1.2rem; margin-top: .3rem; }
