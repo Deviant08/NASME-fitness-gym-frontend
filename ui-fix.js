@@ -3,6 +3,8 @@
   var API_ROOT = 'https://nasme-fitness-gym-backend-production.up.railway.app/api/';
 
   function stripPoolCopy() {
+    document.querySelectorAll('.login-roles, .login-divider').forEach(function (el) { el.remove(); });
+
     document.querySelectorAll('.extras-row a').forEach(function (a) {
       if (/swim|pool/i.test(a.textContent)) a.innerHTML = '🥊 Boxing Studio';
     });
@@ -89,7 +91,6 @@
 
   function wireLanding() {
     stripPoolCopy();
-
     function bindOpen(el) {
       if (!el || el.dataset.loginWired) return;
       el.dataset.loginWired = '1';
@@ -103,7 +104,6 @@
     bindOpen(document.getElementById('nav-login-btn'));
     bindOpen(document.getElementById('open-dashboard-btn'));
     bindOpen(document.getElementById('mob-login-link'));
-
     var closeBtn = document.querySelector('.login-close');
     if (closeBtn && !closeBtn.dataset.loginWired) {
       closeBtn.dataset.loginWired = '1';
@@ -112,7 +112,6 @@
         else document.getElementById('login-overlay').classList.remove('open');
       });
     }
-
     var submit = document.getElementById('login-submit');
     if (submit) {
       var clone = submit.cloneNode(true);
@@ -121,16 +120,6 @@
     }
     var pass = document.getElementById('login-pass');
     if (pass) pass.addEventListener('keydown', function (e) { if (e.key === 'Enter') attemptLoginFix(); });
-    document.querySelectorAll('.role-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var role = btn.textContent.indexOf('Admin') !== -1 ? 'admin' : 'staff';
-        var creds = { admin: ['admin', 'admin123'], staff: ['staff', 'staff123'] };
-        var pair = creds[role];
-        document.getElementById('login-user').value = pair[0];
-        document.getElementById('login-pass').value = pair[1];
-        attemptLoginFix();
-      });
-    });
     document.querySelectorAll('.price-card a').forEach(function (btn) {
       btn.style.cursor = 'pointer';
       btn.addEventListener('click', function (e) { e.preventDefault(); openLoginScreen(); });
