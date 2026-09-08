@@ -6,6 +6,7 @@ let membersCache = [];
 let previewMember = null;
 let editingMemberId = null;
 let memberStatusFilter = '';
+let loginRole = 'staff';
 
 async function api(file, method = 'GET', body = null, params = {}) {
   const [path, qs] = String(file).split('?');
@@ -56,10 +57,31 @@ function showLanding() {
   document.getElementById('site-main')?.classList.remove('hidden');
   document.querySelectorAll('.modal-overlay').forEach(el => { if (el.id !== 'login-overlay') el.classList.remove('open'); });
 }
+function setLoginRole(role) {
+  loginRole = role === 'member' ? 'member' : 'staff';
+  document.querySelectorAll('#login-role-toggle .role-pill').forEach(b => {
+    b.classList.toggle('active', b.dataset.role === loginRole);
+  });
+  const staffFields = document.getElementById('login-fields-staff');
+  const memberFields = document.getElementById('login-fields-member');
+  const sub = document.getElementById('login-sub');
+  if (loginRole === 'member') {
+    staffFields?.classList.add('hidden');
+    memberFields?.classList.remove('hidden');
+    if (sub) sub.textContent = 'Member — code & phone number';
+  } else {
+    memberFields?.classList.add('hidden');
+    staffFields?.classList.remove('hidden');
+    if (sub) sub.textContent = 'Staff or admin — username & password';
+  }
+  document.getElementById('login-error')?.classList.remove('show');
+}
 function openLogin() {
   document.getElementById('login-overlay')?.classList.remove('hidden');
-  const user = document.getElementById('login-user');
-  if (user) setTimeout(() => user.focus(), 50);
+  setLoginRole(loginRole || 'staff');
+  const focusId = loginRole === 'member' ? 'login-member-code' : 'login-user';
+  const el = document.getElementById(focusId);
+  if (el) setTimeout(() => el.focus(), 50);
 }
 async function checkSession() {
   try {
@@ -84,14 +106,28 @@ function applyRoleUI() {
   if (roleEl) roleEl.textContent = (currentUser?.role || 'user').toUpperCase();
 }
 async function doLogin() {
-  const username = document.getElementById('login-user')?.value.trim();
-  const password = document.getElementById('login-pass')?.value;
   const err = document.getElementById('login-error');
   const btn = document.getElementById('login-btn');
-  if (!username || !password) { if (err) { err.textContent = 'Enter username and password.'; err.classList.add('show'); } return; }
-  if (btn) { btn.disabled = true; btn.textContent = 'Signing in...'; }
   if (err) err.classList.remove('show');
+  if (btn) { btn.disabled = true; btn.textContent = 'Signing in...'; }
   try {
+    if (loginRole === 'member') {
+      const member_code = document.getElementById('login-member-code')?.value.trim();
+      const phone = document.getElementById('login-member-phone')?.value.trim();
+      if (!member_code || !phone) {
+        if (err) { err.textContent = 'Enter member code and phone number.'; err.classList.add('show'); }
+        return;
+      }
+      await api('member-auth.php?action=login', 'POST', { member_code, phone });
+      window.location.href = 'member-portal.html';
+      return;
+    }
+    const username = document.getElementById('login-user')?.value.trim();
+    const password = document.getElementById('login-pass')?.value;
+    if (!username || !password) {
+      if (err) { err.textContent = 'Enter username and password.'; err.classList.add('show'); }
+      return;
+    }
     const json = await api('auth.php?action=login', 'POST', { username, password });
     currentUser = json.user;
     showDashboard();
@@ -344,6 +380,12 @@ function initApp() {
   document.getElementById('back-to-site')?.addEventListener('click', showLanding);
   document.getElementById('login-btn')?.addEventListener('click', doLogin);
   document.getElementById('login-pass')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('login-user')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('login-member-code')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('login-member-phone')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.querySelectorAll('#login-role-toggle .role-pill').forEach(btn => {
+    btn.addEventListener('click', () => setLoginRole(btn.dataset.role));
+  });
   document.getElementById('open-login')?.addEventListener('click', openLogin);
   document.getElementById('close-login')?.addEventListener('click', () => document.getElementById('login-overlay')?.classList.add('hidden'));
   document.getElementById('add-member-btn')?.addEventListener('click', () => openMemberForm(null));
