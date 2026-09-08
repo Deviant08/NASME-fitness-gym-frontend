@@ -79,6 +79,11 @@
       <div class="page" id="page-members">
         <div class="toolbar">
           <input type="search" id="member-search" placeholder="Search members..." />
+          <div class="filter-pills" id="member-status-filters">
+            <button type="button" class="filter-pill active" data-status="">Active</button>
+            <button type="button" class="filter-pill" data-status="Archived">Archived</button>
+            <button type="button" class="filter-pill" data-status="all">All</button>
+          </div>
           <button class="btn btn-primary" id="add-member-btn">+ Add Member</button>
         </div>
         <div class="card table-wrap">
