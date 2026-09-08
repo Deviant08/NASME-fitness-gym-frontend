@@ -28,11 +28,11 @@
       <h2>Sign In</h2>
       <button class="modal-close" id="close-login">&times;</button>
     </div>
-    <p class="login-sub">Staff, admin, or member login</p>
+    <p class="login-sub">Staff or admin login</p>
     <div id="login-error" class="form-error"></div>
     <div class="form-group">
       <label>Username</label>
-      <input type="text" id="login-user" autocomplete="username" placeholder="Username or member code" />
+      <input type="text" id="login-user" autocomplete="username" placeholder="Username" />
     </div>
     <div class="form-group">
       <label>Password</label>
@@ -50,12 +50,12 @@
       <div class="sidebar-role" id="sidebar-role">STAFF</div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-item active" data-page="dashboard"><span class="nav-icon">⚡</span> Dashboard</div>
-      <div class="nav-item" data-page="members" data-staff-only><span class="nav-icon">👥</span> Member Management</div>
-      <div class="nav-item" data-page="payments" data-staff-only><span class="nav-icon">💳</span> Payments & Subscriptions</div>
-      <div class="nav-item" data-page="equipment" data-staff-only><span class="nav-icon">🏋️</span> Equipment Management</div>
-      <div class="nav-item" data-page="security" data-staff-only><span class="nav-icon">🔐</span> Data & Security</div>
-      <div class="nav-item" data-page="profile" data-member-only><span class="nav-icon">👤</span> My Profile</div>
+      <div class="nav-item admin-only active" data-page="dashboard"><span class="nav-icon">⚡</span> Dashboard</div>
+      <div class="nav-item" data-page="members"><span class="nav-icon">👥</span> Member Management</div>
+      <div class="nav-item admin-only" data-page="staff"><span class="nav-icon">👨‍💼</span> Staff Management</div>
+      <div class="nav-item admin-only" data-page="payments"><span class="nav-icon">💳</span> Payments & Subscriptions</div>
+      <div class="nav-item admin-only" data-page="equipment"><span class="nav-icon">🏋️</span> Equipment Management</div>
+      <div class="nav-item admin-only" data-page="security"><span class="nav-icon">🔐</span> Data & Security</div>
     </nav>
     <button class="logout-btn" id="logout-btn">Log Out</button>
   </aside>
@@ -95,6 +95,20 @@
         </div>
       </div>
 
+      <div class="page" id="page-staff">
+        <div class="toolbar">
+          <button class="btn btn-primary" id="add-staff-btn">+ Add Staff</button>
+        </div>
+        <div class="card table-wrap">
+          <table>
+            <thead>
+              <tr><th>Username</th><th>Full name</th><th>Role</th><th>Created</th><th></th></tr>
+            </thead>
+            <tbody id="staff-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="page" id="page-payments">
         <div class="card table-wrap">
           <table>
@@ -127,54 +141,91 @@
           </table>
         </div>
       </div>
-
-      <div class="page" id="page-profile">
-        <div class="card">
-          <div class="card-title">My Profile</div>
-          <p>Member profile view. Use the member portal for payments history.</p>
-        </div>
-      </div>
     </div>
   </div>
 </div>
 
 <div id="member-modal" class="modal-overlay">
-  <div class="modal">
+  <div class="modal modal-wide">
     <div class="modal-header">
-      <h2>Add Member</h2>
+      <h2 id="member-modal-title">Gym Membership Registration Form</h2>
       <button class="modal-close" data-close-modal="member-modal">&times;</button>
     </div>
     <form id="member-form">
-      <div class="form-group">
-        <label>Full Name</label>
-        <input name="full_name" required />
+      <input type="hidden" name="id" />
+      <h3>Personal Information</h3>
+      <div class="form-group"><label>Full Name *</label><input name="full_name" required /></div>
+      <div class="form-group"><label>Phone Number *</label><input name="phone" required /></div>
+      <div class="form-row">
+        <div class="form-group"><label>Age</label><input name="age" type="number" min="1" /></div>
+        <div class="form-group"><label>Gender</label><select name="gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
       </div>
-      <div class="form-group">
-        <label>Phone</label>
-        <input name="phone" required />
-      </div>
-      <div class="form-group">
-        <label>Plan</label>
+      <div class="form-group"><label>Address</label><input name="address" /></div>
+
+      <h3>Emergency Contact</h3>
+      <div class="form-group"><label>Name</label><input name="emergency_name" /></div>
+      <div class="form-group"><label>Phone Number</label><input name="emergency_phone" /></div>
+      <div class="form-group"><label>Relationship</label><input name="emergency_relationship" placeholder="Parent, sibling, friend" /></div>
+
+      <h3>Medical Information</h3>
+      <div class="form-group"><label>Any medical condition?</label><select name="has_medical_condition"><option>No</option><option>Yes</option></select></div>
+      <div class="form-group"><label>If yes, please specify</label><textarea name="medical_notes"></textarea></div>
+      <div class="form-group"><label>Any previous injury?</label><select name="has_previous_injury"><option>No</option><option>Yes</option></select></div>
+      <div class="form-group"><label>If yes, please specify</label><textarea name="previous_injury_details"></textarea></div>
+      <div class="form-group"><label>Currently taking medication?</label><select name="taking_medication"><option>No</option><option>Yes</option></select></div>
+
+      <h3>Fitness Information</h3>
+      <div class="form-group"><label>Fitness Goal</label><input name="fitness_goal" /></div>
+      <div class="form-group"><label>Previous Gym Experience</label><select name="previous_gym_experience"><option>No</option><option>Yes</option></select></div>
+
+      <h3>Membership</h3>
+      <div class="form-group"><label>Membership Plan *</label>
         <select name="plan">
-          <option value="Monthly">Monthly</option>
-          <option value="Quarterly">Quarterly</option>
-          <option value="Annual">Annual</option>
+          <option>Daily</option>
+          <option>Weekly</option>
+          <option selected>Monthly</option>
+          <option>Yearly</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Status</label>
-        <select name="status">
-          <option value="active">Active</option>
-          <option value="pending">Pending</option>
-        </select>
-      </div>
-      <button type="submit" class="btn btn-primary btn-block">Create Member</button>
+      <div class="form-group"><label>Start Date</label><input name="start_date" type="date" /></div>
+      <div class="form-group"><label>Payment</label><input name="payment_info" placeholder="Cash, Card, Transfer, amount" /></div>
+
+      <button type="submit" class="btn btn-primary btn-block" id="member-submit">Register Member</button>
+    </form>
+  </div>
+</div>
+
+<div id="member-preview-modal" class="modal-overlay">
+  <div class="modal modal-wide">
+    <div class="modal-header">
+      <h2>Member Preview</h2>
+      <button class="modal-close" data-close-modal="member-preview-modal">&times;</button>
+    </div>
+    <div id="member-preview-body" class="preview-body"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" data-close-modal="member-preview-modal">Close</button>
+      <button class="btn btn-primary" id="preview-edit-btn">Edit information</button>
+    </div>
+  </div>
+</div>
+
+<div id="staff-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Add Staff</h2>
+      <button class="modal-close" data-close-modal="staff-modal">&times;</button>
+    </div>
+    <form id="staff-form">
+      <div class="form-group"><label>Full name</label><input name="full_name" required /></div>
+      <div class="form-group"><label>Username</label><input name="username" required /></div>
+      <div class="form-group"><label>Password</label><input name="password" required /></div>
+      <div class="form-group"><label>Role</label><select name="role"><option value="staff">Staff</option><option value="admin">Admin</option></select></div>
+      <button type="submit" class="btn btn-primary btn-block">Save staff</button>
     </form>
   </div>
 </div>
 
 <div id="toast" class="toast"></div>
-
 <script src="app.js"></script>
 </body>
 </html>
