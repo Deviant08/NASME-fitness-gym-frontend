@@ -219,7 +219,7 @@ function setText(id, val) { const el = document.getElementById(id); if (el) el.t
 function renderMembers(data = []) {
   const tbody = document.getElementById('members-tbody');
   if (!tbody) return;
-  if (!data.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">No members found.</td></tr>'; return; }
+  if (!data.length) { tbody.innerHTML = '<tr><td colspan="8" class="empty">No members found.</td></tr>'; return; }
   tbody.innerHTML = data.map(m => `
     <tr data-id="${m.id}">
       <td><code>${m.member_code || ''}</code></td>
@@ -227,6 +227,7 @@ function renderMembers(data = []) {
       <td>${m.phone || ''}</td>
       <td>${m.plan || ''}</td>
       <td><span class="badge badge-${(m.status || '').toLowerCase()}">${m.status || ''}</span></td>
+      <td>${formatDate(m.expires_at)}</td>
       <td>${formatDate(m.start_date || m.joined_at || m.created_at)}</td>
       <td class="actions">
         <button class="btn-sm btn-ghost" data-action="view" data-id="${m.id}">View</button>
@@ -291,7 +292,7 @@ function previewHtml(m) {
     <h4>Fitness Information</h4>
     <p>Goal: ${dash(m.fitness_goal)}<br>Previous gym experience: ${dash(m.previous_gym_experience)}</p>
     <h4>Membership</h4>
-    <p>Plan: ${dash(m.plan)}<br>Start date: ${dash(m.start_date || m.joined_at)}<br>Payment: ${dash(m.payment_info)}</p>`;
+    <p>Plan: ${dash(m.plan)}<br>Status: ${dash(m.status)}<br>Start date: ${dash(m.start_date || m.joined_at)}<br>Expires: ${dash(m.expires_at)}<br>Payment: ${dash(m.payment_info)}<br>Check-ins: ${dash(m.checkins)}</p>`;
 }
 function fillMemberForm(m) {
   const form = document.getElementById('member-form');
@@ -301,7 +302,9 @@ function fillMemberForm(m) {
     editingMemberId = null;
     if (form.elements.id) form.elements.id.value = '';
     form.elements.plan.value = 'Monthly';
+    if (form.elements.status) form.elements.status.value = 'Active';
     if (form.elements.start_date) form.elements.start_date.value = new Date().toISOString().slice(0, 10);
+    setTimeout(syncExpiresFromPlan, 0);
     return;
   }
   editingMemberId = m.id != null ? String(m.id) : null;
@@ -312,6 +315,9 @@ function fillMemberForm(m) {
   });
   if (form.elements.start_date && (m.start_date || m.joined_at)) {
     form.elements.start_date.value = String(m.start_date || m.joined_at).slice(0, 10);
+  }
+  if (form.elements.expires_at && m.expires_at) {
+    form.elements.expires_at.value = String(m.expires_at).slice(0, 10);
   }
 }
 function openMemberForm(member) {
@@ -372,6 +378,22 @@ async function saveMember(formData) {
     loadMembers();
   } catch (e) { showToast(e.message || 'Could not save member', 'error'); }
 }
+function computeExpiresClient(plan, start) {
+  if (!start) start = new Date().toISOString().slice(0, 10);
+  const d = new Date(start + 'T12:00:00');
+  const p = String(plan || 'Monthly').toLowerCase();
+  if (p.includes('day')) d.setDate(d.getDate() + 1);
+  else if (p.includes('week')) d.setDate(d.getDate() + 7);
+  else if (p.includes('year')) d.setFullYear(d.getFullYear() + 1);
+  else d.setMonth(d.getMonth() + 1);
+  return d.toISOString().slice(0, 10);
+}
+function syncExpiresFromPlan() {
+  const plan = document.getElementById('member-plan')?.value;
+  const start = document.getElementById('member-start-date')?.value;
+  const exp = document.getElementById('member-expires-at');
+  if (exp && plan) exp.value = computeExpiresClient(plan, start);
+}
 function openModal(id) { document.getElementById(id)?.classList.add('open'); }
 function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
 function initApp() {
@@ -413,6 +435,8 @@ function initApp() {
   document.querySelectorAll('[data-close-modal]').forEach(btn => {
     btn.addEventListener('click', () => closeModal(btn.dataset.closeModal));
   });
+  document.getElementById('member-plan')?.addEventListener('change', syncExpiresFromPlan);
+  document.getElementById('member-start-date')?.addEventListener('change', syncExpiresFromPlan);
   document.getElementById('member-search')?.addEventListener('input', e => loadMembers(e.target.value.trim()));
   document.querySelectorAll('#member-status-filters .filter-pill').forEach(btn => {
     btn.addEventListener('click', () => {
