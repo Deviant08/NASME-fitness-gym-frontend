@@ -94,11 +94,14 @@
       text-transform: uppercase; margin-top: 0.8rem;
     }
     .mc-status.active { background:rgba(46,204,113,0.2); color:var(--success); }
-    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; margin-bottom: 2.4rem; }
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; margin-bottom: 2.4rem; }
     .stat-mini { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.8rem 2rem; }
     .stat-mini-label { font-family: var(--fm); font-size: 1rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.8rem; }
     .stat-mini-value { font-family: var(--fd); font-size: 2.6rem; color: var(--maroon-lt); line-height: 1; }
     .stat-mini-sub { font-size: 1.1rem; color: var(--text-dim); margin-top: 0.4rem; }
+    .streak-bar-wrap { height: 6px; background: var(--surface2); border-radius: 3px; margin-top: 0.8rem; overflow: hidden; }
+    .streak-bar { height: 100%; background: linear-gradient(90deg, var(--maroon-lt), #e67e22); width: 0%; transition: width 0.3s; }
+    .streak-bar.active { background: linear-gradient(90deg, #2ecc71, #27ae60); }
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 2.2rem; margin-bottom: 1.6rem; }
     .card-title { font-family: var(--fd); font-size: 2rem; letter-spacing: 1px; margin-bottom: 1.6rem; }
     table { width:100%; border-collapse:collapse; }
@@ -112,6 +115,7 @@
     .alert-success { background:rgba(46,204,113,0.08); color:var(--success); border-color:var(--success); }
     .alert-error { background:rgba(192,57,43,0.08); color:var(--danger); border-color:var(--danger); }
     .empty-state { text-align:center; padding:4rem 2rem; color:var(--text-muted); font-size:1.3rem; }
+    @media(max-width:900px) { .stats-row { grid-template-columns: 1fr 1fr; } }
     @media(max-width:640px) {
       .membership-card { grid-template-columns:1fr; }
       .mc-right { text-align:left; }
@@ -158,7 +162,7 @@
     <div class="alert" id="portal-alert"></div>
     <div class="greeting">
       <h1>WELCOME <em>BACK</em></h1>
-      <p>Check in when you arrive, then view your membership.</p>
+      <p>Check in when you arrive. Streaks start after 5 consecutive days.</p>
     </div>
 
     <button type="button" class="btn-checkin" id="checkin-btn">✓ Check in now</button>
@@ -182,6 +186,12 @@
         <div class="stat-mini-label">Check-ins</div>
         <div class="stat-mini-value" id="sm-checkins">—</div>
         <div class="stat-mini-sub">Total visits</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-label">🔥 Streak</div>
+        <div class="stat-mini-value" id="sm-streak">0</div>
+        <div class="stat-mini-sub" id="sm-streak-sub">Starts after 5 days</div>
+        <div class="streak-bar-wrap"><div class="streak-bar" id="sm-streak-bar"></div></div>
       </div>
       <div class="stat-mini">
         <div class="stat-mini-label">Expires</div>
@@ -265,6 +275,29 @@ function showPortal() {
   document.getElementById('portal-app')?.classList.remove('hidden');
 }
 
+function renderStreak(streak) {
+  const s = streak || {};
+  const active = !!s.streak_active;
+  const consecutive = s.consecutive_days || 0;
+  const threshold = s.streak_threshold || 5;
+  const display = active ? (s.streak || consecutive) : 0;
+  const progress = Math.min(consecutive, threshold);
+
+  const val = document.getElementById('sm-streak');
+  const sub = document.getElementById('sm-streak-sub');
+  const bar = document.getElementById('sm-streak-bar');
+  if (val) val.textContent = String(display);
+  if (sub) {
+    sub.textContent = active
+      ? (consecutive + ' days in a row')
+      : ('Building: ' + consecutive + '/' + threshold + ' days');
+  }
+  if (bar) {
+    bar.style.width = Math.round((progress / threshold) * 100) + '%';
+    bar.classList.toggle('active', active);
+  }
+}
+
 async function checkSession() {
   try {
     const json = await api('member-auth.php?action=me');
@@ -302,13 +335,13 @@ async function attemptLogin() {
 async function loadProfile() {
   try {
     const json = await api('member-auth.php?action=profile');
-    renderProfile(json.member, json.payments || [], json.checkins || []);
+    renderProfile(json.member, json.payments || [], json.checkins || [], json.streak || json.member?.streak);
   } catch (e) {
     showAlert(e.message || 'Could not load profile', 'error');
   }
 }
 
-function renderProfile(member, payments, checkins) {
+function renderProfile(member, payments, checkins, streak) {
   currentMember = member;
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
   set('portal-name', member.full_name || '—');
@@ -322,6 +355,7 @@ function renderProfile(member, payments, checkins) {
   set('sm-checkins', member.checkins ?? '0');
   set('sm-expires', fmtDate(member.expires_at));
   set('sm-payments', payments.length);
+  renderStreak(streak || member.streak);
   const av = document.getElementById('portal-avatar');
   if (av && member.full_name) av.textContent = member.full_name.charAt(0).toUpperCase();
 
