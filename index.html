@@ -29,16 +29,12 @@
       <h2>Sign In</h2>
       <button class="modal-close" id="close-login">&times;</button>
     </div>
-
     <div class="login-role-toggle" id="login-role-toggle">
       <button type="button" class="role-pill active" data-role="staff">Staff</button>
       <button type="button" class="role-pill" data-role="member">Member</button>
     </div>
-
     <p class="login-sub" id="login-sub">Staff or admin — username & password</p>
     <div id="login-error" class="form-error"></div>
-
-    <!-- Staff fields -->
     <div id="login-fields-staff">
       <div class="form-group">
         <label>Username</label>
@@ -49,8 +45,6 @@
         <input type="password" id="login-pass" autocomplete="current-password" placeholder="Password" />
       </div>
     </div>
-
-    <!-- Member fields -->
     <div id="login-fields-member" class="hidden">
       <div class="form-group">
         <label>Member code</label>
@@ -61,9 +55,7 @@
         <input type="tel" id="login-member-phone" autocomplete="tel" placeholder="Phone used at registration" />
       </div>
     </div>
-
     <button class="btn btn-primary btn-block" id="login-btn">Sign In</button>
-    <p class="login-hint muted" id="login-hint" style="margin-top:1rem;font-size:1.2rem;color:var(--text-muted)">Members can also open member-portal.html directly.</p>
   </div>
 </div>
 
@@ -112,7 +104,7 @@
         </div>
         <div class="card table-wrap">
           <table>
-            <thead><tr><th>Code</th><th>Name</th><th>Phone</th><th>Plan</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+            <thead><tr><th>Code</th><th>Name</th><th>Phone</th><th>Plan</th><th>Status</th><th>Expires</th><th>Joined</th><th>Actions</th></tr></thead>
             <tbody id="members-tbody"></tbody>
           </table>
         </div>
@@ -180,8 +172,20 @@
       <div class="form-group"><label>Fitness Goal</label><input name="fitness_goal" /></div>
       <div class="form-group"><label>Previous Gym Experience</label><select name="previous_gym_experience"><option>No</option><option>Yes</option></select></div>
       <h3>Membership</h3>
-      <div class="form-group"><label>Membership Plan *</label><select name="plan"><option>Daily</option><option>Weekly</option><option selected>Monthly</option><option>Yearly</option></select></div>
-      <div class="form-group"><label>Start Date</label><input name="start_date" type="date" /></div>
+      <div class="form-group"><label>Membership Plan *</label><select name="plan" id="member-plan"><option>Daily</option><option>Weekly</option><option selected>Monthly</option><option>Yearly</option></select></div>
+      <div class="form-row">
+        <div class="form-group"><label>Start Date</label><input name="start_date" id="member-start-date" type="date" /></div>
+        <div class="form-group"><label>Expires</label><input name="expires_at" id="member-expires-at" type="date" /></div>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="Active" selected>Active</option>
+          <option value="Pending">Pending</option>
+          <option value="Expired">Expired</option>
+          <option value="Suspended">Suspended</option>
+        </select>
+      </div>
       <div class="form-group"><label>Payment</label><input name="payment_info" placeholder="Cash, Card, Transfer, amount" /></div>
       <button type="submit" class="btn btn-primary btn-block" id="member-submit">Register Member</button>
     </form>
