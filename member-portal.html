@@ -19,10 +19,7 @@
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html { font-size: 62.5%; }
     body { font-family: var(--fb); background: var(--bg); color: var(--text); font-size: 1.4rem; min-height: 100vh; }
-    a { text-decoration:none; color:unset; }
     .hidden { display: none !important; }
-
-    /* Login */
     #login-screen {
       min-height: 100vh; display: flex; align-items: center; justify-content: center;
       padding: 2rem; background: radial-gradient(ellipse at top, #1a1020 0%, var(--bg) 60%);
@@ -40,11 +37,7 @@
       width: 100%; padding: 0.95em 1em; background: var(--surface2); border: 1px solid var(--border);
       border-radius: var(--r); color: var(--text); font-family: var(--fb); font-size: 1.4rem;
     }
-    .form-group input:focus { outline: none; border-color: var(--maroon-lt); }
-    .form-error {
-      display: none; background: rgba(192,57,43,0.12); color: var(--danger);
-      padding: 0.8em 1em; border-radius: var(--r); margin-bottom: 1rem; font-size: 1.25rem;
-    }
+    .form-error { display: none; background: rgba(192,57,43,0.12); color: var(--danger); padding: 0.8em 1em; border-radius: var(--r); margin-bottom: 1rem; font-size: 1.25rem; }
     .form-error.show { display: block; }
     .btn-primary {
       width: 100%; font-family: var(--fb); font-size: 1.35rem; font-weight: 600;
@@ -52,9 +45,14 @@
       background: var(--maroon); color: var(--text);
     }
     .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-checkin {
+      width: 100%; margin-bottom: 2rem; font-family: var(--fb); font-size: 1.5rem; font-weight: 600;
+      padding: 1.1em 1.6em; border: none; border-radius: var(--rl); cursor: pointer;
+      background: linear-gradient(135deg, var(--maroon), #8b1a1a); color: var(--text);
+      box-shadow: 0 8px 24px rgba(89,10,10,0.35);
+    }
+    .btn-checkin:disabled { opacity: 0.55; cursor: not-allowed; }
     .login-hint { margin-top: 1.4rem; font-size: 1.2rem; color: var(--text-muted); line-height: 1.5; text-align: center; }
-
-    /* Portal chrome */
     .topbar {
       background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2.8rem; height: 6.4rem;
       display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100;
@@ -65,8 +63,7 @@
     .member-avatar {
       width: 3.8rem; height: 3.8rem; border-radius: 50%;
       background: linear-gradient(135deg, var(--maroon), var(--navy));
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--fd); font-size: 1.6rem;
+      display: flex; align-items: center; justify-content: center; font-family: var(--fd); font-size: 1.6rem;
     }
     .member-name-top { font-size:1.3rem; font-weight:600; }
     .member-code-top { font-family:var(--fm); font-size:1rem; color:var(--text-muted); }
@@ -75,7 +72,7 @@
       font-family: var(--fb); font-size: 1.2rem; padding: 0.6em 1.4em; border-radius: var(--r); cursor: pointer;
     }
     .portal-main { max-width: 1100px; margin: 0 auto; padding: 3rem 2.4rem 5rem; }
-    .greeting { margin-bottom: 2.8rem; }
+    .greeting { margin-bottom: 2rem; }
     .greeting h1 { font-family: var(--fd); font-size: clamp(3rem, 5vw, 4.5rem); letter-spacing: 2px; line-height: 1; margin-bottom: 0.6rem; }
     .greeting h1 em { color: var(--maroon-lt); font-style:normal; }
     .greeting p { font-size: 1.4rem; color: var(--text-dim); }
@@ -97,12 +94,12 @@
       text-transform: uppercase; margin-top: 0.8rem;
     }
     .mc-status.active { background:rgba(46,204,113,0.2); color:var(--success); }
-    .stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.6rem; margin-bottom: 2.4rem; }
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; margin-bottom: 2.4rem; }
     .stat-mini { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.8rem 2rem; }
     .stat-mini-label { font-family: var(--fm); font-size: 1rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.8rem; }
-    .stat-mini-value { font-family: var(--fd); font-size: 3.2rem; color: var(--maroon-lt); line-height: 1; }
+    .stat-mini-value { font-family: var(--fd); font-size: 2.6rem; color: var(--maroon-lt); line-height: 1; }
     .stat-mini-sub { font-size: 1.1rem; color: var(--text-dim); margin-top: 0.4rem; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 2.2rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 2.2rem; margin-bottom: 1.6rem; }
     .card-title { font-family: var(--fd); font-size: 2rem; letter-spacing: 1px; margin-bottom: 1.6rem; }
     table { width:100%; border-collapse:collapse; }
     th { font-family: var(--fm); font-size: 1rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; padding: 1rem 1.4rem; text-align: left; border-bottom: 1px solid var(--border); }
@@ -118,6 +115,7 @@
     @media(max-width:640px) {
       .membership-card { grid-template-columns:1fr; }
       .mc-right { text-align:left; }
+      .stats-row { grid-template-columns:1fr; }
       .topbar { padding:0 1.6rem; }
       .portal-main { padding:2rem 1.6rem 5rem; }
     }
@@ -125,7 +123,6 @@
 </head>
 <body>
 
-<!-- MEMBER LOGIN (code + phone — not username/password) -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-brand">NASME <span>GYM</span></div>
@@ -140,11 +137,10 @@
       <input id="m-phone" type="tel" autocomplete="tel" placeholder="Same number used at registration" />
     </div>
     <button type="button" class="btn-primary" id="login-btn">Sign In →</button>
-    <p class="login-hint">Use the <strong>member code</strong> from the gym (e.g. MBR-003) and the <strong>phone number</strong> on your registration — not a staff username/password.</p>
+    <p class="login-hint">Use your <strong>member code</strong> and <strong>phone number</strong>.</p>
   </div>
 </div>
 
-<!-- PORTAL (shown after login) -->
 <div id="portal-app" class="hidden">
   <header class="topbar">
     <div class="topbar-brand">NASME <span>GYM</span></div>
@@ -162,8 +158,10 @@
     <div class="alert" id="portal-alert"></div>
     <div class="greeting">
       <h1>WELCOME <em>BACK</em></h1>
-      <p>Here's your membership overview.</p>
+      <p>Check in when you arrive, then view your membership.</p>
     </div>
+
+    <button type="button" class="btn-checkin" id="checkin-btn">✓ Check in now</button>
 
     <div class="membership-card">
       <div>
@@ -174,6 +172,7 @@
       <div class="mc-right">
         <div class="mc-plan" id="mc-plan">—</div>
         <div class="mc-joined" id="mc-joined">—</div>
+        <div class="mc-joined" id="mc-expires">Expires —</div>
         <div class="mc-status active" id="mc-status">—</div>
       </div>
     </div>
@@ -185,9 +184,26 @@
         <div class="stat-mini-sub">Total visits</div>
       </div>
       <div class="stat-mini">
+        <div class="stat-mini-label">Expires</div>
+        <div class="stat-mini-value" id="sm-expires" style="font-size:1.8rem">—</div>
+        <div class="stat-mini-sub">Subscription end</div>
+      </div>
+      <div class="stat-mini">
         <div class="stat-mini-label">Payments</div>
         <div class="stat-mini-value" id="sm-payments">—</div>
         <div class="stat-mini-sub">Total transactions</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">RECENT CHECK-INS</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>When</th></tr></thead>
+          <tbody id="portal-checkins-tbody">
+            <tr><td colspan="2" style="text-align:center;padding:2rem;color:var(--text-muted)">—</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -211,9 +227,8 @@
 const API_BASE = 'https://nasme-fitness-gym-backend-production.up.railway.app/api';
 let currentMember = null;
 
-async function api(file, method = 'GET', body = null, params = {}) {
+async function api(file, method = 'GET', body = null) {
   const url = new URL(`${API_BASE}/${file}`);
-  Object.entries(params || {}).forEach(([k, v]) => { if (v) url.searchParams.set(k, v); });
   const opts = { method, credentials: 'include', headers: { 'Content-Type': 'application/json' } };
   if (body && method !== 'GET') opts.body = JSON.stringify(body);
   const res = await fetch(url, opts);
@@ -228,6 +243,17 @@ function showAlert(msg, type = 'success') {
   a.className = `alert alert-${type} show`;
   a.innerHTML = `<span>${type === 'success' ? '✅' : '❌'}</span> ${msg}`;
   setTimeout(() => a.classList.remove('show'), 4000);
+}
+
+function fmtDate(d) {
+  if (!d) return '—';
+  try { return new Date(d).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' }); }
+  catch { return d; }
+}
+function fmtDateTime(d) {
+  if (!d) return '—';
+  try { return new Date(d).toLocaleString('en-NG', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+  catch { return d; }
 }
 
 function showLogin() {
@@ -276,13 +302,13 @@ async function attemptLogin() {
 async function loadProfile() {
   try {
     const json = await api('member-auth.php?action=profile');
-    renderProfile(json.member, json.payments || []);
+    renderProfile(json.member, json.payments || [], json.checkins || []);
   } catch (e) {
     showAlert(e.message || 'Could not load profile', 'error');
   }
 }
 
-function renderProfile(member, payments) {
+function renderProfile(member, payments, checkins) {
   currentMember = member;
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
   set('portal-name', member.full_name || '—');
@@ -290,26 +316,50 @@ function renderProfile(member, payments) {
   set('mc-name', member.full_name || '—');
   set('mc-code', member.member_code || '—');
   set('mc-plan', member.plan || '—');
-  set('mc-joined', member.joined_at ? ('Joined ' + member.joined_at) : '—');
+  set('mc-joined', member.joined_at || member.start_date ? ('Joined ' + fmtDate(member.joined_at || member.start_date)) : '—');
+  set('mc-expires', member.expires_at ? ('Expires ' + fmtDate(member.expires_at)) : 'Expires —');
   set('mc-status', member.status || '—');
-  set('sm-checkins', member.checkins ?? '—');
+  set('sm-checkins', member.checkins ?? '0');
+  set('sm-expires', fmtDate(member.expires_at));
   set('sm-payments', payments.length);
   const av = document.getElementById('portal-avatar');
   if (av && member.full_name) av.textContent = member.full_name.charAt(0).toUpperCase();
 
+  const ct = document.getElementById('portal-checkins-tbody');
+  if (ct) {
+    ct.innerHTML = !checkins.length
+      ? `<tr><td colspan="2"><div class="empty-state">No check-ins yet. Tap “Check in now” when you arrive.</div></td></tr>`
+      : checkins.map((c, i) => `<tr><td>${checkins.length - i}</td><td>${fmtDateTime(c.checked_in_at)}</td></tr>`).join('');
+  }
+
   const tbody = document.getElementById('portal-payments-tbody');
-  if (!tbody) return;
-  tbody.innerHTML = payments.length === 0
-    ? `<tr><td colspan="6"><div class="empty-state">No payments yet.</div></td></tr>`
-    : payments.map(p => `
-        <tr>
-          <td><span style="font-family:var(--fm);color:#9090e0">${p.txn_code || ''}</span></td>
-          <td>${p.plan || ''}</td>
-          <td style="font-family:var(--fm);color:var(--success)">₦${Number(p.amount || 0).toLocaleString()}</td>
-          <td>${p.method || ''}</td>
-          <td><span class="badge badge-${(p.status || '').toLowerCase() === 'completed' ? 'active' : 'pending'}">${p.status || ''}</span></td>
-          <td>${p.paid_at || ''}</td>
-        </tr>`).join('');
+  if (tbody) {
+    tbody.innerHTML = payments.length === 0
+      ? `<tr><td colspan="6"><div class="empty-state">No payments yet.</div></td></tr>`
+      : payments.map(p => `
+          <tr>
+            <td><span style="font-family:var(--fm);color:#9090e0">${p.txn_code || ''}</span></td>
+            <td>${p.plan || ''}</td>
+            <td style="font-family:var(--fm);color:var(--success)">₦${Number(p.amount || 0).toLocaleString()}</td>
+            <td>${p.method || ''}</td>
+            <td><span class="badge badge-${(p.status || '').toLowerCase() === 'completed' ? 'active' : 'pending'}">${p.status || ''}</span></td>
+            <td>${p.paid_at || ''}</td>
+          </tr>`).join('');
+  }
+}
+
+async function doCheckIn() {
+  const btn = document.getElementById('checkin-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Checking in...'; }
+  try {
+    const json = await api('member-auth.php?action=checkin', 'POST', {});
+    showAlert(json.message || 'Checked in successfully!');
+    loadProfile();
+  } catch (e) {
+    showAlert(e.message || 'Check-in failed', 'error');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '✓ Check in now'; }
+  }
 }
 
 async function logout() {
@@ -323,6 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('m-code')?.addEventListener('keydown', e => { if (e.key === 'Enter') attemptLogin(); });
   document.getElementById('m-phone')?.addEventListener('keydown', e => { if (e.key === 'Enter') attemptLogin(); });
   document.getElementById('logout-btn')?.addEventListener('click', logout);
+  document.getElementById('checkin-btn')?.addEventListener('click', doCheckIn);
   checkSession();
 });
 </script>
