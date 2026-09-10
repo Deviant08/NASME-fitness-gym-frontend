@@ -310,13 +310,15 @@ function fillMemberForm(m) {
     form.elements.plan.value = 'Monthly';
     if (form.elements.status) form.elements.status.value = 'Active';
     if (form.elements.start_date) form.elements.start_date.value = new Date().toISOString().slice(0, 10);
+    if (form.elements.payment_method) form.elements.payment_method.value = 'Cash';
+    if (form.elements.amount) form.elements.amount.value = '';
     setTimeout(syncExpiresFromPlan, 0);
     return;
   }
   editingMemberId = m.id != null ? String(m.id) : null;
   if (form.elements.id) form.elements.id.value = editingMemberId || '';
   Object.keys(m).forEach(k => {
-    if (k === 'id') return;
+    if (k === 'id' || k === 'amount') return;
     if (form.elements[k] != null && m[k] != null) form.elements[k].value = m[k];
   });
   if (form.elements.start_date && (m.start_date || m.joined_at)) {
@@ -325,6 +327,9 @@ function fillMemberForm(m) {
   if (form.elements.expires_at && m.expires_at) {
     form.elements.expires_at.value = String(m.expires_at).slice(0, 10);
   }
+  // Leave amount empty on edit so that entering a value creates a NEW payment record
+  if (form.elements.amount) form.elements.amount.value = '';
+  if (form.elements.payment_method) form.elements.payment_method.value = 'Cash';
 }
 function openMemberForm(member) {
   previewMember = member || null;
@@ -372,15 +377,23 @@ async function saveMember(formData) {
     }
     Object.keys(formData).forEach(k => { if (formData[k] === '') delete formData[k]; });
     if (id) {
-      await api('members.php?id=' + encodeURIComponent(id), 'PUT', formData);
-      showToast('Member details updated');
+      const json = await api('members.php?id=' + encodeURIComponent(id), 'PUT', formData);
+      let msg = 'Member details updated';
+      if (json.txn_code) msg += ' · Payment ' + json.txn_code + ' recorded';
+      showToast(msg);
     } else {
       if (!formData.full_name || !formData.phone || !formData.plan) {
         showToast('Full name, phone and plan are required', 'error');
         return;
       }
+      if (!formData.amount || Number(formData.amount) <= 0) {
+        showToast('Please enter a valid payment amount', 'error');
+        return;
+      }
       const json = await api('members.php', 'POST', formData);
-      showToast('Member registered' + (json.member_code ? ' — ' + json.member_code : ''));
+      let msg = 'Member registered' + (json.member_code ? ' — ' + json.member_code : '');
+      if (json.txn_code) msg += ' · Payment ' + json.txn_code + ' recorded';
+      showToast(msg);
     }
     editingMemberId = null;
     closeModal('member-modal');
