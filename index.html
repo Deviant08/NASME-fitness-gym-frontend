@@ -186,7 +186,18 @@
           <option value="Suspended">Suspended</option>
         </select>
       </div>
-      <div class="form-group"><label>Payment</label><input name="payment_info" placeholder="Cash, Card, Transfer, amount" /></div>
+      <div class="form-row">
+        <div class="form-group"><label>Amount (₦) *</label><input name="amount" type="number" min="0" step="0.01" placeholder="e.g. 12000" /></div>
+        <div class="form-group"><label>Payment Method</label>
+          <select name="payment_method">
+            <option value="Cash">Cash</option>
+            <option value="Card">Card</option>
+            <option value="Mobile Money">Mobile Money</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label>Payment notes (optional)</label><input name="payment_info" placeholder="Optional note" /></div>
       <button type="submit" class="btn btn-primary btn-block" id="member-submit">Register Member</button>
     </form>
   </div>
