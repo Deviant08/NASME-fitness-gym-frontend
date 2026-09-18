@@ -109,9 +109,24 @@ header.hero {
 }
 
 .equip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.4rem; }
-.equip-card { background: #13132b; border: 1px solid #2e2e5a; border-radius: 12px; overflow: hidden; }
+.equip-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
 .equip-photo { height: 140px; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: .6rem; }
 .eq-svg { width: 48px; height: 48px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.4)); }
 .equip-body { padding: 1.2rem; }
 .equip-name { font-weight: 600; font-size: 1.5rem; }
-.equip-meta, .equip-status { color: #a09fbc; font-size: 1.2rem; margin-top: .3rem; }
+.equip-meta, .equip-status { color: var(--text-dim); font-size: 1.2rem; margin-top: .3rem; }
+
+/* Light mode landing overrides */
+html[data-theme="light"] #landing-page header.hero,
+html[data-theme="light"] header.hero {
+  background-image:
+    linear-gradient(120deg, rgba(255,246,236,0.55) 0%, rgba(89,10,10,0.45) 55%, rgba(26,26,80,0.35) 100%),
+    url(https://i.pinimg.com/736x/ce/b4/1d/ceb41df7737b5918904522051f1f56f5.jpg) !important;
+}
+html[data-theme="light"] .ticker-bar { background: var(--surface); color: var(--text-dim); border-bottom: 1px solid var(--border); }
+html[data-theme="light"] .nav_bar { background: rgba(255,255,255,0.86); border-color: var(--border); color: var(--text); backdrop-filter: blur(10px); }
+html[data-theme="light"] .nav_links a,
+html[data-theme="light"] .gym-name-nav { color: var(--text); }
+html[data-theme="light"] .admin-entry p { color: var(--text-dim); }
+html[data-theme="light"] .btn-outline { color: var(--text); border-color: var(--border); }
+html[data-theme="light"] #landing-page .nav-cta-group { display: flex; align-items: center; gap: 0.8rem; }
