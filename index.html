@@ -7,6 +7,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('nasme-theme');
+        if (t !== 'light' && t !== 'dark') {
+          t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+    })();
+  </script>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="landing.css" />
 </head>
@@ -15,7 +26,16 @@
 <main id="site-main">
   <header class="site-header">
     <div class="brand">NASME <span>GYM</span></div>
-    <button class="btn btn-primary" id="open-login">Staff / Member Login</button>
+    <div class="header-actions">
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme">
+        <span class="theme-toggle-track" aria-hidden="true">
+          <span class="theme-toggle-icon sun">☀</span>
+          <span class="theme-toggle-thumb"></span>
+          <span class="theme-toggle-icon moon">☾</span>
+        </span>
+      </button>
+      <button class="btn btn-primary" id="open-login">Staff / Member Login</button>
+    </div>
   </header>
   <section class="hero">
     <h1>TRAIN HARD.<br><em>STAY STRONG.</em></h1>
@@ -81,6 +101,13 @@
     <header class="topbar">
       <div class="page-title" id="pageTitle">DASHBOARD</div>
       <span class="status-dot"></span> Live
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme">
+        <span class="theme-toggle-track" aria-hidden="true">
+          <span class="theme-toggle-icon sun">☀</span>
+          <span class="theme-toggle-thumb"></span>
+          <span class="theme-toggle-icon moon">☾</span>
+        </span>
+      </button>
     </header>
     <div class="pages">
       <div class="page active" id="page-dashboard">
@@ -234,6 +261,7 @@
 </div>
 
 <div id="toast" class="toast"></div>
+<script src="theme.js"></script>
 <script src="app.js"></script>
 <script src="homepage-restore.js"></script>
 </body>
