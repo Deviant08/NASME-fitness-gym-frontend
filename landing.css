@@ -120,11 +120,11 @@ header.hero {
 html[data-theme="light"] #landing-page header.hero,
 html[data-theme="light"] header.hero {
   background-image:
-    linear-gradient(120deg, rgba(255,246,236,0.55) 0%, rgba(89,10,10,0.45) 55%, rgba(26,26,80,0.35) 100%),
+    linear-gradient(120deg, rgba(242,242,248,0.62) 0%, rgba(89,10,10,0.42) 55%, rgba(26,26,80,0.32) 100%),
     url(https://i.pinimg.com/736x/ce/b4/1d/ceb41df7737b5918904522051f1f56f5.jpg) !important;
 }
 html[data-theme="light"] .ticker-bar { background: var(--surface); color: var(--text-dim); border-bottom: 1px solid var(--border); }
-html[data-theme="light"] .nav_bar { background: rgba(255,255,255,0.86); border-color: var(--border); color: var(--text); backdrop-filter: blur(10px); }
+html[data-theme="light"] .nav_bar { background: rgba(242,242,248,0.92); border-color: var(--border); color: var(--text); backdrop-filter: blur(10px); }
 html[data-theme="light"] .nav_links a,
 html[data-theme="light"] .gym-name-nav { color: var(--text); }
 html[data-theme="light"] .admin-entry p { color: var(--text-dim); }
