@@ -178,6 +178,7 @@
     if (document.getElementById('landing-page')) {
       wireLandingButtons();
       showLanding();
+      if (typeof window.mountThemeToggles === 'function') window.mountThemeToggles();
       return;
     }
     try {
@@ -202,6 +203,7 @@
     } catch (e) {}
     wireLandingButtons();
     showLanding();
+    if (typeof window.mountThemeToggles === 'function') window.mountThemeToggles();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', injectOriginalLanding);
